@@ -1,30 +1,25 @@
 package com.scnu.dao;
 
 import com.scnu.entity.StuCou;
-import com.scnu.entity.StuCouExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface StuCouMapper {
-    int countByExample(StuCouExample example);
 
-    int deleteByExample(StuCouExample example);
+    /**
+     * 插入抢课成功的记录
+     * @param courseId
+     * @param stuId
+     * @return 执行结果
+     */
+    int insertStuCou(@Param("courseId")Integer courseId,@Param("stuId")Integer stuId);
 
-    int deleteByPrimaryKey(Integer id);
+    /**
+     * 根据stuId查询，封装所属Course
+     * @param stuId
+     * @return
+     */
+    List<StuCou> listByStuIdWithCourse(@Param("stuId")Integer stuId);
 
-    int insert(StuCou record);
-
-    int insertSelective(StuCou record);
-
-    List<StuCou> selectByExample(StuCouExample example);
-
-    StuCou selectByPrimaryKey(Integer id);
-
-    int updateByExampleSelective(@Param("record") StuCou record, @Param("example") StuCouExample example);
-
-    int updateByExample(@Param("record") StuCou record, @Param("example") StuCouExample example);
-
-    int updateByPrimaryKeySelective(StuCou record);
-
-    int updateByPrimaryKey(StuCou record);
 }

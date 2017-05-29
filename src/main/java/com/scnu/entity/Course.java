@@ -5,15 +5,17 @@ import java.util.Date;
 public class Course {
     private Integer id;
 
-    private String name;
+    private String courseName;//课程名
 
-    private Integer number;
+    private Integer number;//数量
 
-    private Date startTime;
+    private Date startTime;//开始时间
 
-    private Date endTime;
+    private Date endTime;//结束时间
 
-    private Date createTime;
+    private Date createTime;//创建时间
+
+    private Integer state;//显示状态:0为不显示，1为显示
 
     public Integer getId() {
         return id;
@@ -23,12 +25,12 @@ public class Course {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCourseName() {
+        return courseName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public Integer getNumber() {
@@ -61,5 +63,13 @@ public class Course {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

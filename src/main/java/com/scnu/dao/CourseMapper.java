@@ -1,31 +1,33 @@
 package com.scnu.dao;
 
+import com.scnu.dto.PageBean;
 import com.scnu.entity.Course;
-import com.scnu.entity.CourseExample;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CourseMapper {
-    int countByExample(CourseExample example);
 
-    int deleteByExample(CourseExample example);
+    /**
+     * 减少课程数量
+     * @param id
+     * @param executeTime
+     * @return 执行的记录数，>1执行成功，=0执行失败
+     */
+    int reduceNumber(@Param("id")Integer id,@Param("executeTime")Date executeTime);
 
-    int deleteByPrimaryKey(Integer id);
+    /**
+     * 获取课程列表
+     * @return 课程列表
+     */
+    List<Course> listCourse(@Param("pageBean") PageBean pageBean);
 
-    int insert(Course record);
+    /**
+     * 根据id获取课程
+     * @param id
+     * @return 课程
+     */
+    Course getCourseById(@Param("id")Integer id);
 
-    int insertSelective(Course record);
-
-    List<Course> selectByExample(CourseExample example);
-
-    Course selectByPrimaryKey(Integer id);
-
-    int updateByExampleSelective(@Param("record") Course record, @Param("example") CourseExample example);
-
-    int updateByExample(@Param("record") Course record, @Param("example") CourseExample example);
-
-    int updateByPrimaryKeySelective(Course record);
-
-    int updateByPrimaryKey(Course record);
 }
