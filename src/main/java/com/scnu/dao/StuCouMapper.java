@@ -3,8 +3,6 @@ package com.scnu.dao;
 import com.scnu.entity.StuCou;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 public interface StuCouMapper {
 
     /**
@@ -20,6 +18,6 @@ public interface StuCouMapper {
      * @param stuId
      * @return
      */
-    List<StuCou> listByStuIdWithCourse(@Param("stuId")Integer stuId);
+    StuCou getByStuIdWithCourse(@Param("courseId")Integer courseId,@Param("stuId")Integer stuId);
 
 }

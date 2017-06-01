@@ -15,9 +15,10 @@
         values(#{courseId},0,now(),#{stuId})
     </insert>
 
-    <select id="listByStuIdWithCourse" resultMap="BaseResultMap">
+    <select id="getByStuIdWithCourse" resultMap="BaseResultMap">
         select * from stucou
         where stuId=#{stuId}
+        and courseId=#{courseId}
     </select>
 
 </mapper>

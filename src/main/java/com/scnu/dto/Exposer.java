@@ -23,6 +23,25 @@ public class Exposer {
     //秒杀的结束时间
     private long end;
 
+    public Exposer(boolean exposed, String md5, long id) {
+        this.exposed = exposed;
+        this.md5 = md5;
+        this.id = id;
+    }
+
+    public Exposer(boolean exposed, long id,long now, long start, long end) {
+        this.exposed = exposed;
+        this.id=id;
+        this.now = now;
+        this.start = start;
+        this.end = end;
+    }
+
+    public Exposer(boolean exposed, long id) {
+        this.exposed = exposed;
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }
