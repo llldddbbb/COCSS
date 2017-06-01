@@ -2,7 +2,7 @@ package com.scnu.service.impl;
 
 import com.scnu.dao.CourseMapper;
 import com.scnu.dao.StuCouMapper;
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.CourseExecution;
 import com.scnu.dto.Exposer;
 import com.scnu.dto.PageBean;
 import com.scnu.entity.Course;
@@ -75,16 +75,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
 
-    @Transactional//开启事物
+    @Transactional//开启事务
     @Override
-    public CourseResult executeCourse(int id, Student student, String md5) throws CloseException, RepeatException, CourseException {
+    public CourseExecution executeCourse(int id, int studentId, String md5) throws CloseException, RepeatException, CourseException {
         if (md5 == null || !md5.equals(getMD5(id))) {
             throw new CourseException("course data rewrite");//数据被重写了
         }
 
         try {
             //插入抢课信息
-            int resultNum = stuCouMapper.insertStuCou(id, student.getId());
+            int resultNum = stuCouMapper.insertStuCou(id, studentId);
             if (resultNum <= 0) {
                 throw new RepeatException("course repeat");
             } else {
@@ -96,8 +96,8 @@ public class CourseServiceImpl implements CourseService {
                     throw new CloseException("course is closed");
                 } else {
                     //秒杀成功,得到成功插入的明细记录,并返回成功秒杀的信息 commit
-                    StuCou success = stuCouMapper.getByStuIdWithCourse(id, student.getId());
-                    return new CourseResult(id, CourseStateEnum.SUCCESS, success);
+                    StuCou success = stuCouMapper.getByStuIdWithCourse(id, studentId);
+                    return new CourseExecution(id, CourseStateEnum.SUCCESS, success);
                 }
             }
         } catch (CloseException e1) {
@@ -105,7 +105,7 @@ public class CourseServiceImpl implements CourseService {
         } catch (RepeatException e2) {
             throw e2;
         } catch (Exception e) {
-            //所以编译期异常转化为运行期异常
+            //所有编译期异常转化为运行期异常
             throw new CourseException("inner error :" + e.getMessage());
         }
     }

@@ -1,69 +1,45 @@
 package com.scnu.dto;
 
-import com.scnu.entity.StuCou;
-import com.scnu.enums.CourseStateEnum;
-
 /**
- * Created by ldb on 2017/5/30.
- * 封装抢课结果
+ * Created by ldb on 2017/6/1.
  */
-public class CourseResult {
+public class CourseResult<T> {
 
-    private int id;
+    private boolean success;
+    private T data;
+    private String error;
 
-    //抢课执行结果的状态
-    private int state;
-
-    //状态的明文标识
-    private String stateInfo;
-
-    //当抢课成功时，需要传递抢课成功的课程回去
-    private StuCou stuCou;
-
-    //抢课成功返回所有信息
-    public CourseResult(int id, CourseStateEnum courseStateEnum, StuCou stuCou) {
-        this.id = id;
-        this.state = courseStateEnum.getState();
-        this.stateInfo = courseStateEnum.getInfo();
-        this.stuCou = stuCou;
+    public CourseResult(boolean success, T data) {
+        this.success = success;
+        this.data = data;
     }
 
-    //抢课失败返回信息
-    public CourseResult(int id, CourseStateEnum courseStateEnum) {
-        this.id = id;
-        this.state = courseStateEnum.getState();
-        this.stateInfo = courseStateEnum.getInfo();
+    public CourseResult(boolean success, String error) {
+        this.success = success;
+        this.error = error;
     }
 
-    public int getId() {
-        return id;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
-    public int getState() {
-        return state;
+    public T getData() {
+        return data;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setData(T data) {
+        this.data = data;
     }
 
-    public String getStateInfo() {
-        return stateInfo;
+    public String getError() {
+        return error;
     }
 
-    public void setStateInfo(String stateInfo) {
-        this.stateInfo = stateInfo;
-    }
-
-    public StuCou getStuCou() {
-        return stuCou;
-    }
-
-    public void setStuCou(StuCou stuCou) {
-        this.stuCou = stuCou;
+    public void setError(String error) {
+        this.error = error;
     }
 }

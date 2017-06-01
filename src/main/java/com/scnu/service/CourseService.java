@@ -1,9 +1,8 @@
 package com.scnu.service;
 
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.CourseExecution;
 import com.scnu.dto.Exposer;
 import com.scnu.entity.Course;
-import com.scnu.entity.Student;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
 import com.scnu.exception.RepeatException;
@@ -42,11 +41,11 @@ public interface CourseService {
      * 执行抢课操作
      *
      * @param id
-     * @param student
+     * @param studentId
      * @param md5
      * @return
      */
-    CourseResult executeCourse(int id, Student student, String md5) throws CloseException, RepeatException, CourseException;
+    CourseExecution executeCourse(int id, int studentId, String md5) throws CloseException, RepeatException, CourseException;
 
 
 }
