@@ -35,7 +35,7 @@ public class CourseController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         List<Course> courses = courseService.listCourse();
-        model.addAttribute(courses);
+        model.addAttribute("list",courses);
         return "list";
     }
 
