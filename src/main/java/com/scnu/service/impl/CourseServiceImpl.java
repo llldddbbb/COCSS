@@ -2,8 +2,10 @@ package com.scnu.service.impl;
 
 import com.scnu.dao.CourseMapper;
 import com.scnu.dao.StuCouMapper;
+import com.scnu.dao.StudentMapper;
 import com.scnu.dto.CourseExecution;
 import com.scnu.dto.Exposer;
+import com.scnu.dto.LoginResult;
 import com.scnu.dto.PageBean;
 import com.scnu.entity.Course;
 import com.scnu.entity.StuCou;
@@ -32,6 +34,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private StuCouMapper stuCouMapper;
+
+    @Autowired
+    private StudentMapper studentMapper;
 
     //加入盐值，混淆md5
     private final String salt = "asdfgasrf^&*23*&(hjkKH;sdajhkl&*(&kljf";
@@ -77,8 +82,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional//开启事务
     @Override
-    public CourseExecution executeCourse(int id, int studentId, String md5) throws CloseException, RepeatException, CourseException {
-        if (md5 == null || !md5.equals(getMD5(id))) {
+    public CourseExecution executeCourse(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException {
+        if (md5 == null || !md5.equals(getMD5(id)) || studentMD5 == null || !studentMD5.equals(getMD5(studentId))) {
             throw new CourseException("course data rewrite");//数据被重写了
         }
 
@@ -108,5 +113,15 @@ public class CourseServiceImpl implements CourseService {
             //所有编译期异常转化为运行期异常
             throw new CourseException("inner error :" + e.getMessage());
         }
+    }
+
+    @Override
+    public LoginResult checkLogin(Student student) {
+        Student result = studentMapper.checkLogin(student.getUserName(), student.getPassword());
+        if(result==null){
+            return new LoginResult(student.getId(),false);
+        }
+        String studentMD5 = getMD5(student.getId());
+        return new LoginResult(student.getId(),studentMD5,true);
     }
 }

@@ -3,7 +3,9 @@ package com.scnu.controller;
 import com.scnu.dto.CourseExecution;
 import com.scnu.dto.CourseResult;
 import com.scnu.dto.Exposer;
+import com.scnu.dto.LoginResult;
 import com.scnu.entity.Course;
+import com.scnu.entity.Student;
 import com.scnu.enums.CourseStateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.RepeatException;
@@ -82,13 +84,14 @@ public class CourseController {
     @RequestMapping(value = "/{courseId}/{md5}/execution",method = RequestMethod.POST)
     @ResponseBody
     public CourseResult<CourseExecution> execute(@PathVariable("courseId") Integer courseId,@PathVariable("md5") String md5,
-                                                   @CookieValue(value = "studentId", required = false) Integer studentId) {
+                                                   @CookieValue(value = "studentId", required = false) Integer studentId,
+                                                 @CookieValue(value = "studentMD5", required = false) String studentMD5) {
         if (studentId == null) {
             return new CourseResult<CourseExecution>(false, "未注册");
         }
         CourseResult<CourseExecution> result;
         try {
-            CourseExecution execution = courseService.executeCourse(courseId, studentId, md5);
+            CourseExecution execution = courseService.executeCourse(courseId, studentId, md5,studentMD5);
             return new CourseResult<CourseExecution>(true, execution);
         } catch (RepeatException e1) {
             CourseExecution execution = new CourseExecution(courseId, CourseStateEnum.REPEAT_KILL);
@@ -109,6 +112,12 @@ public class CourseController {
     public CourseResult<Long> time() {
         Date now = new Date();
         return new CourseResult<Long>(true, now.getTime());
+    }
+
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @ResponseBody
+    public LoginResult checkLogin(Student student){
+        return courseService.checkLogin(student);
     }
 
 
