@@ -20,7 +20,7 @@
 <div class="container">
     <div class="panel panel-default text-center">
         <div class="pannel-heading">
-            <h1 th:text="${course.name}"></h1>
+            <h1 th:text="${course.courseName}"></h1>
         </div>
 
         <div class="panel-body">
@@ -34,32 +34,34 @@
     </div>
 </div>
 <!--登录弹出层 输入电话-->
-<div id="killPhoneModal" class="modal fade">
+<div id="loginModal" class="modal fade">
 
     <div class="modal-dialog">
 
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title text-center">
-                    <span class="glyphicon glyphicon-phone"> </span>秒杀电话:
+                    <span class="glyphicon glyphicon-phone"> </span>登录:
                 </h3>
             </div>
 
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-8 col-xs-offset-2">
-                        <input type="text" name="killPhone" id="killPhoneKey"
-                               placeholder="填写手机号^o^" class="form-control">
+                        <input type="text" name="userName" id="userName"
+                               placeholder="填写学号^o^" class="form-control">
+                       <!-- <input type="password" name="password" id="password"
+                               placeholder="填写密码^o^" class="form-control">-->
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer">
                 <!--验证信息-->
-                <span id="killPhoneMessage" class="glyphicon"> </span>
-                <button type="button" id="killPhoneBtn" class="btn btn-success">
+                <span id="loginMessage" class="glyphicon"> </span>
+                <button type="button" id="loginBtn" class="btn btn-success">
                     <span class="glyphicon glyphicon-phone"></span>
-                    Submit
+                    登录
                 </button>
             </div>
 

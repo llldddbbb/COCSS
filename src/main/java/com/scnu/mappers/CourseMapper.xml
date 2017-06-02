@@ -21,14 +21,14 @@
     and number &gt; 0
   </update>
 
-  <select id="listCourse" resultMap="BaseResultMap">
+  <select id="listCourse" resultMap="BaseResultMap" >
     select * from course where state=1
   </select>
 
   <select id="getCourseById" resultType="Course">
     select * from course
     where id=#{id}
-    limit #{start},#{pageSize}
+
   </select>
 
 </mapper>

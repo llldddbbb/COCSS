@@ -35,11 +35,11 @@
                 </thead>
                 <tbody>
                     <tr th:each="course:${list}">
-                        <td th:text="${course.name}"></td>
+                        <td th:text="${course.courseName}"></td>
                         <td th:text="${course.number}"></td>
-                        <td th:text="${#formatDate(course.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td th:text="${#formatDate(course.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td th:text="${#formatDate(course.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${#calendars.format(course.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${#calendars.format(course.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${#calendars.format(course.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td><a class="btn btn-info" th:href="'/course/'+${course.id}+'/detail'" target="_blank">详情</a></td>
                     </tr>
                 </tbody>

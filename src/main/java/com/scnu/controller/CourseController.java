@@ -65,9 +65,9 @@ public class CourseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/{id}/exposer", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/exposer", method = RequestMethod.GET)
     @ResponseBody
-    public CourseResult<Exposer> exposer(Integer id) {
+    public CourseResult<Exposer> exposer(@PathVariable Integer id) {
         CourseResult<Exposer> result;
         try {
             Exposer exposer = courseService.exportUrl(id);
