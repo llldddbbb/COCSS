@@ -19,14 +19,15 @@
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-heading text-center">
-            <h2>秒杀列表</h2>
+            <h2>选课列表</h2>
         </div>
         <div class="panel-body">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>名称</th>
-                    <th>剩余</th>
+                    <th>课程名称</th>
+                    <th>课程剩余</th>
+                    <th>授课教师</th>
                     <th>开始时间</th>
                     <th>结束时间</th>
                     <th>创建时间</th>
@@ -37,10 +38,11 @@
                     <tr th:each="course:${list}">
                         <td th:text="${course.courseName}"></td>
                         <td th:text="${course.number}"></td>
+                        <td th:text="${course.teacher}"></td>
                         <td th:text="${#calendars.format(course.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${#calendars.format(course.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${#calendars.format(course.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td><a class="btn btn-info" th:href="'/course/'+${course.id}+'/detail'" target="_blank">详情</a></td>
+                        <td><a class="btn btn-info" th:href="'/course/'+${course.id}+'/detail'">详情</a></td>
                     </tr>
                 </tbody>
             </table>

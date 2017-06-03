@@ -9,6 +9,8 @@ public class Course {
 
     private Integer number;//数量
 
+    private String teacher;//数量
+
     private Date startTime;//开始时间
 
     private Date endTime;//结束时间
@@ -64,5 +66,11 @@ public class Course {
         this.createTime = createTime;
     }
 
+    public String getTeacher() {
+        return teacher;
+    }
 
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
+    }
 }

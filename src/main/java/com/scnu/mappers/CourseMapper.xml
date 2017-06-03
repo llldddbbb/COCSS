@@ -6,6 +6,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="courseName" property="courseName" jdbcType="VARCHAR" />
     <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="teacher" property="teacher" jdbcType="VARCHAR" />
     <result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
     <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
