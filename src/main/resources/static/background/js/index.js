@@ -27,20 +27,12 @@ layui.define([ 'layer', 'form'], function (exports) {
 
             layer.close(index);
 
-            var ip=returnCitySN["cip"];
-            var ipName=returnCitySN["cname"];
-            var loginTime=new Date();
-
             $.ajax({
                 url:"/login",
                 type:"GET",
                 data:{
                     userName:data.field.account,
                     password:data.field.password,
-                    ip:ip,
-                    ipName:ipName,
-                    loginTime:loginTime,
-
                 },
                 success:function (result) {
                     var result=eval("("+result+")");
