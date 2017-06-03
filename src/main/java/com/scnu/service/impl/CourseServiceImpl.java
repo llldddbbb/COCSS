@@ -3,6 +3,7 @@ package com.scnu.service.impl;
 import com.scnu.dao.CourseMapper;
 import com.scnu.dao.StuCouMapper;
 import com.scnu.dao.StudentMapper;
+import com.scnu.dao.cache.RedisDao;
 import com.scnu.dto.CourseExecution;
 import com.scnu.dto.Exposer;
 import com.scnu.dto.LoginResult;
@@ -15,7 +16,9 @@ import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.CourseService;
+import com.scnu.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -38,6 +41,12 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private StudentMapper studentMapper;
 
+    @Autowired
+    private RedisDao redisDao;
+
+    @Value("${REDIS_BASE_KEY}")
+    private String REDIS_BASE_KEY;
+
     //加入盐值，混淆md5
     private final String salt = "asdfgasrf^&*23*&(hjkKH;sdajhkl&*(&kljf";
 
@@ -54,11 +63,20 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Exposer exportUrl(int id) {
-        Course course = courseMapper.getCourseById(id);
-        //查不到该记录
-        if (course == null) {
-            return new Exposer(false, id);
+        //添加Redis缓存
+        Course course= JsonUtil.jsonToPojo(redisDao.get(REDIS_BASE_KEY+":"+id),Course.class);
+        if(course==null){
+            //如果缓存中为空，则从数据库中查询
+            course = courseMapper.getCourseById(id);
+            //查不到该记录
+            if (course == null) {
+                return new Exposer(false, id);
+            }else{
+                //将数据序列化存进缓存中
+                redisDao.set(REDIS_BASE_KEY+":"+id,JsonUtil.objectToJson(course));
+            }
         }
+
         Date startTime = course.getStartTime();
         Date endTime = course.getEndTime();
 
