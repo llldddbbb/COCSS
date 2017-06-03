@@ -64,7 +64,12 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Exposer exportUrl(int id) {
         //添加Redis缓存
-        Course course= JsonUtil.jsonToPojo(redisDao.get(REDIS_BASE_KEY+":"+id),Course.class);
+        Course course = null;
+        //添加原则:不影响业务逻辑，用try catch捕获异常
+        try{
+            course= JsonUtil.jsonToPojo(redisDao.get(REDIS_BASE_KEY+":"+id),Course.class);
+        }catch (Exception e){
+        }
         if(course==null){
             //如果缓存中为空，则从数据库中查询
             course = courseMapper.getCourseById(id);
@@ -73,7 +78,12 @@ public class CourseServiceImpl implements CourseService {
                 return new Exposer(false, id);
             }else{
                 //将数据序列化存进缓存中
-                redisDao.set(REDIS_BASE_KEY+":"+id,JsonUtil.objectToJson(course));
+                //添加原则:不影响业务逻辑，用try catch捕获异常
+                try{
+                    course= JsonUtil.jsonToPojo(redisDao.get(REDIS_BASE_KEY+":"+id),Course.class);
+                    redisDao.set(REDIS_BASE_KEY+":"+id,JsonUtil.objectToJson(course));
+                }catch (Exception e){
+                }
             }
         }
 
