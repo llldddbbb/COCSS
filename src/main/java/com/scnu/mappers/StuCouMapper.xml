@@ -2,21 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.scnu.dao.StuCouMapper">
     <resultMap id="BaseResultMap" type="com.scnu.entity.StuCou">
-        <id column="id" property="id" jdbcType="INTEGER"/>
         <id column="courseId" property="courseId" jdbcType="INTEGER"/>
+        <result column="stuId" property="stuId" jdbcType="INTEGER"/>
         <result column="state" property="state" jdbcType="INTEGER"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="stuId" property="stuId" jdbcType="INTEGER"/>
         <association column="courseId" property="course" select="com.scnu.dao.CourseMapper.getCourseById"></association>
     </resultMap>
 
     <insert id="insertStuCou">
-        insert into stucou(courseId,state,createTime,stuId)
-        values(#{courseId},0,now(),#{stuId})
+        insert ignore into stu_cou(courseId,stuId,state,createTime)
+        values(#{courseId},#{stuId},0,now())
     </insert>
 
     <select id="getByStuIdWithCourse" resultMap="BaseResultMap">
-        select * from stucou
+        select * from stu_cou
         where stuId=#{stuId}
         and courseId=#{courseId}
     </select>

@@ -9,26 +9,24 @@
     <result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
     <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="state" property="state" jdbcType="INTEGER" />
   </resultMap>
 
   <update id="reduceNumber">
-    update from course
+    update course
     set number=number-1
     where id=#{id}
-    and startTime &gt;= #{executeTime}
-    and endTime &lt;= #{executeTime}
+    and startTime &lt;= #{executeTime}
+    and endTime &gt;= #{executeTime}
     and number &gt; 0
   </update>
 
   <select id="listCourse" resultMap="BaseResultMap" >
-    select * from course where state=1
+    select * from course
   </select>
 
   <select id="getCourseById" resultType="Course">
     select * from course
     where id=#{id}
-
   </select>
 
 </mapper>

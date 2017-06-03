@@ -15,7 +15,6 @@ public class Course {
 
     private Date createTime;//创建时间
 
-    private Integer state;//显示状态:0为不显示，1为显示
 
     public Integer getId() {
         return id;
@@ -65,11 +64,5 @@ public class Course {
         this.createTime = createTime;
     }
 
-    public Integer getState() {
-        return state;
-    }
 
-    public void setState(Integer state) {
-        this.state = state;
-    }
 }

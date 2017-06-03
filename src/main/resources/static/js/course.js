@@ -15,14 +15,14 @@ var course = {
         }
     },
 
-    //验证手机号
-    /*validatePhone: function (phone) {
-        if (phone && phone.length == 11 && !isNaN(phone)) {
+    //验证登录信息
+    validateLogin: function (userName,password) {
+        if (userName && !isNaN(userName)&&password) {
             return true;//直接判断对象会看对象是否为空,空就是undefine就是false; isNaN 非数字返回true
         } else {
             return false;
         }
-    },*/
+    },
 
     //详情页秒杀逻辑
     detail: {
@@ -30,11 +30,10 @@ var course = {
         init: function (params) {
             //手机验证和登录,计时交互
             //规划我们的交互流程
-            //在cookie中查找手机号
+            //在cookie中查找信息
             var studentId = $.cookie('studentId');
-            //验证手机号
-            if (studentId!=null) {
-                //绑定手机 控制输出
+            var studentMD5 = $.cookie('studentMD5');
+            if (studentId==null||studentMD5==null) {
                 var loginModal = $('#loginModal');
                 loginModal.modal({
                     show: true,//显示弹出层
@@ -44,12 +43,20 @@ var course = {
 
                 $('#loginBtn').click(function () {
                     var userName = $('#userName').val();
-                    console.log("userName: " + userName);
-                    if (userName!=null) {
-                        //电话写入cookie(7天过期)
-                        $.cookie('studentId', userName, {expires: 7, path: '/course'});
-                        //验证通过　　刷新页面
-                        window.location.reload();
+                    var password = $('#password').val();
+                    if (course.validateLogin(userName,password)) {
+                        $.post("/course/login",{userName:userName,password:password},function(result){
+                            if(result&&result['is_Login']){
+                                //写入cookie(7天过期)
+                                $.cookie('studentId', result['studentId'], {expires: 7, path: '/course'});
+                                $.cookie('studentMD5', result['studentMD5'], {expires: 7, path: '/course'});
+                                //验证通过　　刷新页面
+                                window.location.reload();
+                            }else{
+                                $('#loginMessage').hide().html('<label class="label label-danger">用户名或密码错误!</label>').show(300);
+                            }
+                        });
+
                     } else {
                         //todo 错误文案信息抽取到前端字典里
                         $('#loginMessage').hide().html('<label class="label label-danger">学号错误!</label>').show(300);
@@ -76,9 +83,9 @@ var course = {
     },
 
     handlerSeckill: function (courseId, node) {
-        //获取秒杀地址,控制显示器,执行秒杀
-        node.hide().html('<button class="btn btn-primary btn-lg" id="killBtn">开始秒杀</button>');
 
+        node.hide().html('<button class="btn btn-primary btn-lg" id="killBtn">开始秒杀</button>');
+        //获取秒杀地址,控制显示器,执行秒杀
         $.get(course.URL.exposer(courseId), {}, function (result) {
             //在回调函数种执行交互流程
             if (result && result['success']) {

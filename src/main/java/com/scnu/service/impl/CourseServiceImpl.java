@@ -121,7 +121,7 @@ public class CourseServiceImpl implements CourseService {
         if(result==null){
             return new LoginResult(student.getId(),false);
         }
-        String studentMD5 = getMD5(student.getId());
-        return new LoginResult(student.getId(),studentMD5,true);
+        String studentMD5 = getMD5(result.getId());
+        return new LoginResult(result.getId(),studentMD5,true);
     }
 }
