@@ -2,7 +2,7 @@
 // javascript 模块化(package.类.方法)
 
 var course = {
-    //封装秒杀相关ajax的url
+    //封装选课相关ajax的url
     URL: {
         now: function () {
             return '/course/time/now';
@@ -24,7 +24,7 @@ var course = {
         }
     },
 
-    //详情页秒杀逻辑
+    //详情页选课逻辑
     detail: {
         //详情页初始化
         init: function (params) {
@@ -84,37 +84,37 @@ var course = {
 
     handlerSeckill: function (courseId, node) {
 
-        node.hide().html('<button class="btn btn-primary btn-lg" id="killBtn">开始秒杀</button>');
-        //获取秒杀地址,控制显示器,执行秒杀
+        node.hide().html('<button class="btn btn-primary btn-lg" id="killBtn">开始选课</button>');
+        //获取选课地址,控制显示器,执行选课
         $.get(course.URL.exposer(courseId), {}, function (result) {
             //在回调函数种执行交互流程
             if (result && result['success']) {
                 var exposer = result['data'];
                 if (exposer['exposed']) {
-                    //开启秒杀
-                    //获取秒杀地址
+                    //开启选课
+                    //获取选课地址
                     var md5 = exposer['md5'];
                     var killUrl = course.URL.execution(courseId, md5);
                     console.log("killUrl: " + killUrl);
                     //绑定一次点击事件
                     $('#killBtn').one('click', function () {
-                        //执行秒杀请求
+                        //执行选课请求
                         //1.先禁用按钮
                         $(this).addClass('disabled');//,<-$(this)===('#killBtn')->
-                        //2.发送秒杀请求执行秒杀
+                        //2.发送选课请求执行选课
                         $.post(killUrl, {}, function (result) {
                             if (result && result['success']) {
                                 var killResult = result['data'];
                                 var state = killResult['state'];
                                 var stateInfo = killResult['stateInfo'];
-                                //显示秒杀结果
+                                //显示选课结果
                                 node.html('<span class="label label-success">' + stateInfo + '</span>');
                             }
                         });
                     });
                     node.show();
                 } else {
-                    //未开启秒杀(浏览器计时偏差)
+                    //未开启选课(浏览器计时偏差)
                     var now = exposer['now'];
                     var start = exposer['start'];
                     var end = exposer['end'];
@@ -131,23 +131,23 @@ var course = {
         console.log(courseId + '_' + nowTime + '_' + startTime + '_' + endTime);
         var courseBox = $('#course-box');
         if (nowTime > endTime) {
-            //秒杀结束
-            courseBox.html('秒杀结束!');
+            //选课结束
+            courseBox.html('选课结束!');
         } else if (nowTime < startTime) {
-            //秒杀未开始,计时事件绑定
+            //选课未开始,计时事件绑定
             var killTime = new Date(startTime + 1000);//todo 防止时间偏移
             courseBox.countdown(killTime, function (event) {
                 //时间格式
-                var format = event.strftime('秒杀倒计时: %D天 %H时 %M分 %S秒 ');
+                var format = event.strftime('选课倒计时: %D天 %H时 %M分 %S秒 ');
                 courseBox.html(format);
             }).on('finish.countdown', function () {
                 //时间完成后回调事件
-                //获取秒杀地址,控制现实逻辑,执行秒杀
+                //获取选课地址,控制现实逻辑,执行选课
                 console.log('______fininsh.countdown');
                 course.handlerSeckill(courseId, courseBox);
             });
         } else {
-            //秒杀开始
+            //选课开始
             course.handlerSeckill(courseId, courseBox);
         }
     }

@@ -3,11 +3,9 @@ package com.scnu.entity;
 public class Student {
     private Integer id;
 
-    private String userName;//用户名
+    private String userName;//用户名，学号
 
     private String password;//密码
-
-    private String stuNo;//学号
 
     private String stuName;//姓名
 
@@ -39,14 +37,6 @@ public class Student {
 
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
-    }
-
-    public String getStuNo() {
-        return stuNo;
-    }
-
-    public void setStuNo(String stuNo) {
-        this.stuNo = stuNo;
     }
 
     public String getStuName() {
