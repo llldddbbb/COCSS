@@ -35,7 +35,6 @@ layui.define([ 'layer', 'form'], function (exports) {
                     password:data.field.password,
                 },
                 success:function (result) {
-                    var result=eval("("+result+")");
                     if(result.success){
                         layer.msg('登陆成功，正在跳转......', { icon: 6 });
                         layer.closeAll('page');
