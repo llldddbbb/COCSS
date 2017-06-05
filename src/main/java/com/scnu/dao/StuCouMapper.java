@@ -1,9 +1,13 @@
 package com.scnu.dao;
 
 import com.scnu.entity.StuCou;
+import com.scnu.utils.MyMapper;
 import org.apache.ibatis.annotations.Param;
 
-public interface StuCouMapper {
+import javax.persistence.Table;
+
+@Table(name = "stu_cou")
+public interface StuCouMapper extends MyMapper<StuCou> {
 
     /**
      * 插入抢课成功的记录
