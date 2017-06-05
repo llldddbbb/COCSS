@@ -1,16 +1,11 @@
 package com.scnu.service;
 
-import com.scnu.dto.CourseExecution;
-import com.scnu.dto.Exposer;
-import com.scnu.dto.LoginResult;
+import com.scnu.dto.*;
 import com.scnu.entity.Course;
 import com.scnu.entity.Student;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
 import com.scnu.exception.RepeatException;
-
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by ldb on 2017/5/30.
@@ -22,7 +17,7 @@ public interface CourseService {
      *
      * @return
      */
-    List<Course> listCourse(HashMap<String,Object> param);
+    PageResult<Course> listCourse(PageBean pageBean);
 
     /**
      * 查询单个选课
@@ -60,10 +55,11 @@ public interface CourseService {
     LoginResult checkLogin(Student student);
 
     /**
-     * 获取总记录数
+     * 添加选课
+     * @param course
      * @return
      */
-    Integer getCourseCount();
+    Integer addCourse(Course course);
 
 
 }

@@ -1,9 +1,6 @@
 package com.scnu.controller;
 
-import com.scnu.dto.CourseExecution;
-import com.scnu.dto.CourseResult;
-import com.scnu.dto.Exposer;
-import com.scnu.dto.LoginResult;
+import com.scnu.dto.*;
 import com.scnu.entity.Course;
 import com.scnu.entity.Student;
 import com.scnu.enums.CourseStateEnum;
@@ -16,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,7 +33,8 @@ public class CourseController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        List<Course> courses = courseService.listCourse(new HashMap<>());
+        PageBean pageBean=new PageBean(1,10);
+        List<Course> courses = courseService.listCourse(pageBean).getRows();
         model.addAttribute("list",courses);
         return "list";
     }

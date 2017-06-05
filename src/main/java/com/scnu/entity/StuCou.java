@@ -1,5 +1,6 @@
 package com.scnu.entity;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 public class StuCou {
@@ -10,6 +11,7 @@ public class StuCou {
 
     private Integer state;//状态标识:-1:无效 0:成功
 
+    @Column(name = "createTime")
     private Date createTime;//创建时间
 
     private Course course;

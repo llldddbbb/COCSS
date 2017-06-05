@@ -1,21 +1,17 @@
 package com.scnu.entity;
 
+import javax.persistence.Column;
+
 /**
  * Created by ldb on 2017/6/3.
  */
-public class Admin {
+public class Admin extends BaseEntity{
 
-    private Integer id;
+    @Column(name="userName")
     private String userName;
     private String password;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getUserName() {
         return userName;

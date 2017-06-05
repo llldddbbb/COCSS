@@ -2,34 +2,30 @@ package com.scnu.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.Column;
 import java.util.Date;
 
-public class Course {
-    private Integer id;
+public class Course extends BaseEntity{
 
+    @Column(name = "courseName")
     private String courseName;//课程名
 
     private Integer number;//数量
 
     private String teacher;//数量
 
+    @Column(name = "startTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date startTime;//开始时间
 
+    @Column(name = "endTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date endTime;//结束时间
 
+    @Column(name = "createTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;//创建时间
 
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getCourseName() {
         return courseName;

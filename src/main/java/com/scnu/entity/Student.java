@@ -1,27 +1,26 @@
 package com.scnu.entity;
 
-public class Student {
-    private Integer id;
+import javax.persistence.Column;
 
+public class Student extends BaseEntity{
+
+    @Column(name = "userName")
     private String userName;//用户名，学号
 
     private String password;//密码
 
+    @Column(name = "stuName")
     private String stuName;//姓名
 
+    @Column(name = "gradeName")
     private String gradeName;//年级
 
+    @Column(name = "className")
     private String className;//班级
 
+    @Column(name = "majorName")
     private String majorName;//专业
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getUserName() {
         return userName;

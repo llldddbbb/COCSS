@@ -1,13 +1,12 @@
 package com.scnu.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.scnu.dao.CourseMapper;
 import com.scnu.dao.StuCouMapper;
 import com.scnu.dao.StudentMapper;
 import com.scnu.dao.cache.RedisDao;
-import com.scnu.dto.CourseExecution;
-import com.scnu.dto.Exposer;
-import com.scnu.dto.LoginResult;
-import com.scnu.dto.PageBean;
+import com.scnu.dto.*;
 import com.scnu.entity.Course;
 import com.scnu.entity.StuCou;
 import com.scnu.entity.Student;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -52,13 +50,25 @@ public class CourseServiceImpl implements CourseService {
     private final String salt = "asdfgasrf^&*23*&(hjkKH;sdajhkl&*(&kljf";
 
     @Override
-    public List<Course> listCourse(HashMap<String,Object> param) {
-        return courseMapper.listCourse(param);
+    public PageResult<Course> listCourse(PageBean pageBean) {
+        PageResult<Course> result=new PageResult<>();
+        //PageHelper封装分页逻辑
+        PageHelper.startPage(pageBean.getStart(),pageBean.getPageSize());
+        //获取分页后列表
+        List<Course> courseList = courseMapper.selectAll();
+
+        // 取分页信息
+        PageInfo<Course> pageInfo = new PageInfo<>(courseList);
+        long total = pageInfo.getTotal(); //获取总记录数
+        //填充值
+        result.setRows(courseList);
+        result.setTotal(total);
+        return result;
     }
 
     @Override
     public Course getCourse(int id) {
-        return courseMapper.getCourseById(id);
+        return courseMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -72,7 +82,7 @@ public class CourseServiceImpl implements CourseService {
         }
         if(course==null){
             //如果缓存中为空，则从数据库中查询
-            course = courseMapper.getCourseById(id);
+            course = courseMapper.selectByPrimaryKey(id);
             //查不到该记录
             if (course == null) {
                 return new Exposer(false, id);
@@ -153,8 +163,10 @@ public class CourseServiceImpl implements CourseService {
         return new LoginResult(result.getId(),studentMD5,true);
     }
 
+
     @Override
-    public Integer getCourseCount() {
-        return courseMapper.getCourseCount();
+    public Integer addCourse(Course course) {
+        course.setCreateTime(new Date());
+        return courseMapper.insert(course);
     }
 }
