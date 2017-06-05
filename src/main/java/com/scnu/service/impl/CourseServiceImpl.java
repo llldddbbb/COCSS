@@ -169,4 +169,19 @@ public class CourseServiceImpl implements CourseService {
         course.setCreateTime(new Date());
         return courseMapper.insert(course);
     }
+
+    @Override
+    public Integer updateCourse(Course course) {
+        return courseMapper.updateByPrimaryKey(course);
+    }
+
+    @Override
+    public CourseResult deleteCourse(Integer id) {
+        int result = courseMapper.deleteByPrimaryKey(id);
+        if(result >0){
+            return CourseResult.ok();
+        }else{
+            return CourseResult.isNotOK();
+        }
+    }
 }

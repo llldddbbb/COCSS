@@ -61,5 +61,19 @@ public interface CourseService {
      */
     Integer addCourse(Course course);
 
+    /**
+     * 更新选课
+     * @param course
+     * @return
+     */
+    Integer updateCourse(Course course);
+
+    /**
+     * 删除选课
+     * @param id
+     * @return
+     */
+    CourseResult deleteCourse(Integer id);
+
 
 }

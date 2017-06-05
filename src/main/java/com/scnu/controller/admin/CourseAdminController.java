@@ -1,5 +1,6 @@
 package com.scnu.controller.admin;
 
+import com.scnu.dto.CourseResult;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
 import com.scnu.entity.Course;
@@ -54,6 +55,22 @@ public class CourseAdminController {
         }else{
             return null;
         }
+    }
+
+    @RequestMapping(value = "/course",method = RequestMethod.PUT)
+    public String updateCourse(Course course){
+        Integer result = courseService.updateCourse(course);
+        if(result>0){
+            return "redirect:/admin/courseManage";
+        }else{
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/course/{id}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public CourseResult deleteCourse(@PathVariable Integer id){
+        return courseService.deleteCourse(id);
     }
 
 }
