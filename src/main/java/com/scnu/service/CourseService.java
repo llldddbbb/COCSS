@@ -9,6 +9,7 @@ import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
 import com.scnu.exception.RepeatException;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface CourseService {
      *
      * @return
      */
-    List<Course> listCourse();
+    List<Course> listCourse(HashMap<String,Object> param);
 
     /**
      * 查询单个选课
@@ -51,7 +52,18 @@ public interface CourseService {
     CourseExecution executeCourse(int id, int studentId, String md5,String studentMD5) throws CloseException, RepeatException, CourseException;
 
 
+    /**
+     * 登录验证
+     * @param student
+     * @return
+     */
     LoginResult checkLogin(Student student);
+
+    /**
+     * 获取总记录数
+     * @return
+     */
+    Integer getCourseCount();
 
 
 }

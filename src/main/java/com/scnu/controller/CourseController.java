@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class CourseController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        List<Course> courses = courseService.listCourse();
+        List<Course> courses = courseService.listCourse(new HashMap<>());
         model.addAttribute("list",courses);
         return "list";
     }

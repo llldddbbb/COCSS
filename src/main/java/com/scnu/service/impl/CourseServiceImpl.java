@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -51,9 +52,8 @@ public class CourseServiceImpl implements CourseService {
     private final String salt = "asdfgasrf^&*23*&(hjkKH;sdajhkl&*(&kljf";
 
     @Override
-    public List<Course> listCourse() {
-        PageBean pageBean = new PageBean(1, 5);
-        return courseMapper.listCourse(pageBean);
+    public List<Course> listCourse(HashMap<String,Object> param) {
+        return courseMapper.listCourse(param);
     }
 
     @Override
@@ -151,5 +151,10 @@ public class CourseServiceImpl implements CourseService {
         }
         String studentMD5 = getMD5(result.getId());
         return new LoginResult(result.getId(),studentMD5,true);
+    }
+
+    @Override
+    public Integer getCourseCount() {
+        return courseMapper.getCourseCount();
     }
 }

@@ -21,13 +21,20 @@
     and number &gt; 0
   </update>
 
-  <select id="listCourse" resultMap="BaseResultMap" >
+  <select id="listCourse" resultMap="BaseResultMap" parameterType="Map">
     select * from course
+    <if test="start!=null and pageSize!=null">
+      limit #{start},#{pageSize}
+    </if>
   </select>
 
   <select id="getCourseById" resultType="Course">
     select * from course
     where id=#{id}
+  </select>
+
+  <select id="getCourseCount" resultType="Integer">
+     select count(*) from course
   </select>
 
 </mapper>

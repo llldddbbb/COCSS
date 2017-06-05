@@ -1,10 +1,10 @@
 package com.scnu.dao;
 
-import com.scnu.dto.PageBean;
 import com.scnu.entity.Course;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public interface CourseMapper {
@@ -21,7 +21,7 @@ public interface CourseMapper {
      * 获取课程列表
      * @return 课程列表
      */
-    List<Course> listCourse(@Param("pageBean") PageBean pageBean);
+    List<Course> listCourse(HashMap<String,Object> param);
 
     /**
      * 根据id获取课程
@@ -29,5 +29,11 @@ public interface CourseMapper {
      * @return 课程
      */
     Course getCourseById(@Param("id")Integer id);
+
+    /**
+     * 获取课程总数
+     * @return
+     */
+    Integer getCourseCount();
 
 }
