@@ -59,9 +59,9 @@
 </head>
 <body>
     <fieldset id="dataList" class="layui-elem-field layui-field-title sys-list-field" style="display:none;">
-        <legend style="text-align:center;">课程列表</legend>
+        <legend style="text-align:center;">学生信息列表</legend>
         <button class="layui-btn" style="margin:10px auto auto auto;display: block" onclick="layui.datalist.addData()">
-            <i class="layui-icon">&#xe608;</i> 添加课程
+            <i class="layui-icon">&#xe608;</i> 添加学生信息
         </button>
         <div class="layui-field-box layui-form">
             <div id="dataContent" class="">
@@ -81,42 +81,41 @@
             var laypage = layui.laypage;
             var element = layui.element();
             var laypageId = 'pageNav';
-            var laydate = layui.laydate;
 
             initilData(1, 10);
             //页数据初始化
             //currentIndex：当前页面
             //pageSize：页容量（每页显示的条数）
-            var courseNum;
+            var studentNum;
             function initilData(currentIndex, pageSize) {
                 var index = layer.load(1);
                 //模拟数据加载
                 setTimeout(function () {
                     layer.close(index);
                     $.ajax({
-                        url:"/admin/course/list/"+currentIndex,
+                        url:"/admin/student/list/"+currentIndex,
                         type:"GET",
                         data:{
                             pageSize:pageSize
                         },
                         success:function(result){
-                            courseNum=result.total;
-                            var courseList=result.rows;
+                            studentNum=result.total;
+                            var studentList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="40"><col width="120"><col width="70"><col width="80"><col width="120"><col width="120"><col width="120"><col width="40"><col width="40"></colgroup>';
-                            html += '<thead><tr><th>编号</th><th>课程名称</th><th>剩余数量</th><th>授课教师</th><th>开始时间</th><th>结束时间</th><th>创建时间</th><th colspan="2">操作</th></tr></thead>';
+                            html += '<colgroup><col width="40"><col width="120"><col width="120"><col width="120"><col width="120"><col width="120"><col width="120"><col width="40"><col width="40"></colgroup>';
+                            html += '<thead><tr><th>编号</th><th>学号</th><th>密码</th><th>姓名</th><th>专业</th><th>年级</th><th>班级</th><th colspan="2">操作</th></tr></thead>';
                             html += '<tbody>';
-                            for(var i in courseList){
-                                var item=courseList[i];
+                            for(var i in studentList){
+                                var item=studentList[i];
                                 html+='<tr>';
                                 html+='<td>'+item.id+'</td>';
-                                html+='<td>'+item.courseName+'</td>';
-                                html+='<td>'+item.number+'</td>';
-                                html+='<td>'+item.teacher+'</td>';
-                                html+='<td>'+item.startTime+'</td>';
-                                html+='<td>'+item.endTime+'</td>';
-                                html+='<td>'+item.createTime+'</td>';
+                                html+='<td>'+item.userName+'</td>';
+                                html+='<td>'+item.password+'</td>';
+                                html+='<td>'+item.stuName+'</td>';
+                                html+='<td>'+item.majorName+'</td>';
+                                html+='<td>'+item.gradeName+'</td>';
+                                html+='<td>'+item.className+'</td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+')\'><i class="layui-icon">&#xe642;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
                                 html+='</tr>';
@@ -131,7 +130,7 @@
                     $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
                     laypage({
                         cont: laypageId,
-                        pages: courseNum/pageSize==0?courseNum/pageSize:courseNum/pageSize+1,
+                        pages: studentNum/pageSize==0?studentNum/pageSize:studentNum/pageSize+1,
                         groups: 5,
                         skip: true,
                         curr: currentIndex,
@@ -148,11 +147,11 @@
             //输出接口，主要是两个函数，一个删除一个编辑
             var datalist = {
                 deleteData: function (id) {
-                    layer.confirm('确定删除这条课程吗？', {
+                    layer.confirm('确定删除这条学生信息吗？', {
                         btn: ['确定', '取消'] //按钮
                     }, function () {
                         $.ajax({
-                            url:'/admin/course/'+id,
+                            url:'/admin/student/'+id,
                             data:{},
                             type:'DELETE',
                             success:function (result) {
@@ -161,7 +160,7 @@
                                         closeBtn: 0,
                                         icon: 1
                                     }, function(){
-                                        window.location.href="/admin/courseManage"
+                                        window.location.href="/admin/studentManage"
                                     });
                                 }else{
                                     layer.alert('删除失败!', {icon: 5});
@@ -174,29 +173,32 @@
                 },
                 editData: function (item) {
                     var html='';
-                    html+='<form class="layui-form layui-form-pane" action="/admin/course" method="post">';
+                    html+='<form class="layui-form layui-form-pane" action="/admin/student" method="post">';
                     html+='<div style="margin: 20px 0">';
                     html+='<input type="hidden" name="_method" value="put" />';
                     html+='<input type="hidden" name="id" value="'+item.id+'" />';
-                    html+='<input type="hidden" name="createTime" value="'+item.createTime+'" />';
-                    html+='<label class="layui-form-label" style="border: none" >课程标题:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="courseName"  class="layui-input" value="'+item.courseName+'">';
+                    html+='<label class="layui-form-label" style="border: none" >学号:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="userName"  class="layui-input" value="'+item.userName+'">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >授课教师:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="teacher"  class="layui-input" value="'+item.teacher+'">';
+                    html+='<label class="layui-form-label" style="border: none"  >密码:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="password"  class="layui-input" value="'+item.password+'">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >选课数量:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="number"  class="layui-input" value="'+item.number+'" >';
+                    html+='<label class="layui-form-label" style="border: none"  >姓名:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="stuName"  class="layui-input" value="'+item.stuName+'" >';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >开始时间:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="startTime" class="layui-input" value="'+item.startTime+'" onclick="layui.laydate({elem: this, istime: true,format: \'YYYY-MM-DD hh:mm:ss\'})" >';
+                    html+='<label class="layui-form-label" style="border: none"  >专业:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="majorName" class="layui-input" value="'+item.majorName+'"  >';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >结束时间:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="endTime"  class="layui-input" value="'+item.endTime+'" onclick="layui.laydate({elem: this, istime: true,format: \'YYYY-MM-DD hh:mm:ss\'})">';
+                    html+='<label class="layui-form-label" style="border: none"  >年级:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="gradeName"  class="layui-input" value="'+item.gradeName+'" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >班级:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="className"  class="layui-input" value="'+item.className+'" >';
                     html+='</div>';
                     html+='<div class="layui-form-item">';
                     html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
@@ -209,33 +211,37 @@
                         type: 1,
                         skin: 'layui-layer-rim', //加上边框
                         area: '520px', //宽高
-                        title:'修改课程',
+                        title:'修改学生信息',
                         content: html
                     });
                     form.render('radio');  //radio，编辑和添加的时候
                 },
                 addData:function () {
                     var html='';
-                    html+='<form class="layui-form layui-form-pane" action="/admin/course" method="post">';
+                    html+='<form class="layui-form layui-form-pane" action="/admin/student" method="post">';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none" >课程标题:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="courseName"  class="layui-input" >';
+                    html+='<label class="layui-form-label" style="border: none" >学号:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="userName"  class="layui-input" >';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >授课教师:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="teacher"  class="layui-input" >';
+                    html+='<label class="layui-form-label" style="border: none"  >密码:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="password"  class="layui-input" >';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >选课数量:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="number"  class="layui-input" >';
+                    html+='<label class="layui-form-label" style="border: none"  >姓名:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="stuName"  class="layui-input" >';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >开始时间:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="startTime" class="layui-input" onclick="layui.laydate({elem: this, istime: true,format: \'YYYY-MM-DD hh:mm:ss\'})" >';
+                    html+='<label class="layui-form-label" style="border: none"  >专业:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="majorName" class="layui-input"  >';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >结束时间:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="endTime"  class="layui-input" onclick="layui.laydate({elem: this, istime: true,format: \'YYYY-MM-DD hh:mm:ss\'})">';
+                    html+='<label class="layui-form-label" style="border: none"  >年级:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="gradeName"  class="layui-input" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >班级:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="className"  class="layui-input" >';
                     html+='</div>';
                     html+='<div class="layui-form-item">';
                     html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
@@ -249,7 +255,7 @@
                         type: 1,
                         skin: 'layui-layer-rim', //加上边框
                         area: '520px', //宽高
-                        title:'添加课程',
+                        title:'添加学生信息',
                         content: html
                     });
 

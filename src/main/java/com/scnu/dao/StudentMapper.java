@@ -1,9 +1,10 @@
 package com.scnu.dao;
 
 import com.scnu.entity.Student;
+import com.scnu.utils.MyMapper;
 import org.apache.ibatis.annotations.Param;
 
-public interface StudentMapper {
+public interface StudentMapper extends MyMapper<Student> {
 
     /**
      * 验证学生登录
