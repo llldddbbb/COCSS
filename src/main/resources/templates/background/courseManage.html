@@ -124,24 +124,25 @@
                             html+='</tbody></table>';
                             $('#dataContent').html(html);
                             element.init();
+                            $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
+                            laypage({
+                                cont: laypageId,
+                                pages: courseNum/pageSize==0?courseNum/pageSize:courseNum/pageSize+1,
+                                groups: 5,
+                                skip: true,
+                                curr: currentIndex,
+                                jump: function (obj, first) {
+                                    var currentIndex = obj.curr;
+                                    if (!first) {
+                                        initilData(currentIndex, pageSize);
+                                    }
+                                }
+                            });
 
                         }
                     });
 
-                    $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
-                    laypage({
-                        cont: laypageId,
-                        pages: courseNum/pageSize==0?courseNum/pageSize:courseNum/pageSize+1,
-                        groups: 5,
-                        skip: true,
-                        curr: currentIndex,
-                        jump: function (obj, first) {
-                            var currentIndex = obj.curr;
-                            if (!first) {
-                                initilData(currentIndex, pageSize);
-                            }
-                        }
-                    });
+
                 }, 500);
             }
 

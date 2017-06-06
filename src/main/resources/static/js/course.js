@@ -28,7 +28,6 @@ var course = {
     detail: {
         //详情页初始化
         init: function (params) {
-            //手机验证和登录,计时交互
             //规划我们的交互流程
             //在cookie中查找信息
             var studentId = $.cookie('studentId');

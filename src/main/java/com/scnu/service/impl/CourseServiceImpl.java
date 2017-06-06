@@ -90,7 +90,6 @@ public class CourseServiceImpl implements CourseService {
                 //将数据序列化存进缓存中
                 //添加原则:不影响业务逻辑，用try catch捕获异常
                 try{
-                    course= JsonUtil.jsonToPojo(redisDao.get(REDIS_BASE_KEY+":"+id),Course.class);
                     redisDao.set(REDIS_BASE_KEY+":"+id,JsonUtil.objectToJson(course));
                 }catch (Exception e){
                 }

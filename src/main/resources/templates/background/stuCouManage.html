@@ -60,9 +60,6 @@
 <body>
     <fieldset id="dataList" class="layui-elem-field layui-field-title sys-list-field" style="display:none;">
         <legend style="text-align:center;">选课信息列表</legend>
-        <button class="layui-btn" style="margin:10px auto auto auto;display: block" onclick="layui.datalist.addData()">
-            <i class="layui-icon">&#xe608;</i> 添加选课信息
-        </button>
         <div class="layui-field-box layui-form">
             <div id="dataContent" class="">
                 <!--内容区域 ajax获取-->
@@ -103,8 +100,8 @@
                             var stuCouList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="80"><col width="80"><col width="140"><col width="80"><col width="80"><col width="120"><col width="40"><col width="40"></colgroup>';
-                            html += '<thead><tr><th>学号</th><th>学生姓名</th><th>所属班级</th><th>所选课程</th><th>授课教师</th><th>选课时间</th><th colspan="2">操作</th></tr></thead>';
+                            html += '<colgroup><col width="80"><col width="80"><col width="140"><col width="80"><col width="80"><col width="120"></colgroup>';
+                            html += '<thead><tr><th>学号</th><th>学生姓名</th><th>所属班级</th><th>所选课程</th><th>授课教师</th><th>选课时间</th></tr></thead>';
                             html += '<tbody>';
                             for(var i in stuCouList){
                                 var item=stuCouList[i];
@@ -115,31 +112,29 @@
                                 html+='<td>'+item.course.courseName+'</td>';
                                 html+='<td>'+item.course.teacher+'</td>';
                                 html+='<td>'+item.createTime+'</td>';
-                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+')\'><i class="layui-icon">&#xe642;</i></button></td>';
-                                html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
                                 html+='</tr>';
                             }
                             html+='</tbody></table>';
                             $('#dataContent').html(html);
                             element.init();
-
+                            $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
+                            laypage({
+                                cont: laypageId,
+                                pages: stuCouNum/pageSize==0?stuCouNum/pageSize:stuCouNum/pageSize+1,
+                                groups: 5,
+                                skip: true,
+                                curr: currentIndex,
+                                jump: function (obj, first) {
+                                    var currentIndex = obj.curr;
+                                    if (!first) {
+                                        initilData(currentIndex, pageSize);
+                                    }
+                                }
+                            });
                         }
                     });
 
-                    $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
-                    laypage({
-                        cont: laypageId,
-                        pages: stuCouNum/pageSize==0?stuCouNum/pageSize:stuCouNum/pageSize+1,
-                        groups: 5,
-                        skip: true,
-                        curr: currentIndex,
-                        jump: function (obj, first) {
-                            var currentIndex = obj.curr;
-                            if (!first) {
-                                initilData(currentIndex, pageSize);
-                            }
-                        }
-                    });
+
                 }, 500);
             }
 
