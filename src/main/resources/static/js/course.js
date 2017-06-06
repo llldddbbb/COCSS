@@ -33,7 +33,8 @@ var course = {
             //在cookie中查找信息
             var studentId = $.cookie('studentId');
             var studentMD5 = $.cookie('studentMD5');
-            if (studentId==null||studentMD5==null) {
+            var stuName = $.cookie('stuName');
+            if (studentId==null||studentId==""||studentMD5==null||studentMD5=="") {
                 var loginModal = $('#loginModal');
                 loginModal.modal({
                     show: true,//显示弹出层
@@ -47,9 +48,10 @@ var course = {
                     if (course.validateLogin(userName,password)) {
                         $.post("/course/login",{userName:userName,password:password},function(result){
                             if(result&&result['is_Login']){
-                                //写入cookie(7天过期)
-                                $.cookie('studentId', result['studentId'], {expires: 7, path: '/course'});
-                                $.cookie('studentMD5', result['studentMD5'], {expires: 7, path: '/course'});
+                                //写入cookie(关闭浏览器则过期)
+                                $.cookie('studentId', result['studentId'], {path: '/course'});
+                                $.cookie('studentMD5', result['studentMD5'], {path: '/course'});
+                                $.cookie('stuName', result['stuName'], {path: '/course'});
                                 //验证通过　　刷新页面
                                 window.location.reload();
                             }else{
@@ -59,9 +61,12 @@ var course = {
 
                     } else {
                         //todo 错误文案信息抽取到前端字典里
-                        $('#loginMessage').hide().html('<label class="label label-danger">学号错误!</label>').show(300);
+                        $('#loginMessage').hide().html('<label class="label label-danger">用户名或密码错误!</label>').show(300);
                     }
                 });
+            }else{
+                $("#header-info").html("欢迎你:"+stuName);
+                $("#logout").show();
             }
 
             //已经登录
@@ -150,6 +155,14 @@ var course = {
             //选课开始
             course.handlerSeckill(courseId, courseBox);
         }
+    },
+
+    logout:function(){
+        $.cookie('studentId',  "",{path:"/course"});
+        $.cookie('studentMD5', "",{path:"/course"});
+        $.cookie('stuName',  "",{path:"/course"});
+        //刷新页面
+        window.location.reload();
     }
 
 }

@@ -157,10 +157,10 @@ public class CourseServiceImpl implements CourseService {
     public LoginResult checkLogin(Student student) {
         Student result = studentMapper.checkLogin(student.getUserName(), student.getPassword());
         if(result==null){
-            return new LoginResult(student.getId(),false);
+            return new LoginResult(false);
         }
         String studentMD5 = getMD5(result.getId());
-        return new LoginResult(result.getId(),studentMD5,true);
+        return new LoginResult(result.getId(),studentMD5,true,result.getStuName());
     }
 
 
