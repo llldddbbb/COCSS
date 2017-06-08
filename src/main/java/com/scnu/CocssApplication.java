@@ -15,6 +15,6 @@ public class CocssApplication {
 
 	@RequestMapping("/")
 	public String showIndex(){
-		return "index";
+		return "redirect:/course/list";
 	}
 }
