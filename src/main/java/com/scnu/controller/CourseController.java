@@ -38,7 +38,7 @@ public class CourseController {
         PageBean pageBean=new PageBean(1,10);
         List<Course> courses = courseService.listCourse(pageBean).getRows();
         model.addAttribute("list",courses);
-        return "courseList";
+        return "course/courseList";
     }
 
     /**
@@ -58,7 +58,7 @@ public class CourseController {
             return "forward:/course/list";
         }
         model.addAttribute("course", course);
-        return "courseDetail";
+        return "course/courseDetail";
     }
 
     /**
@@ -118,7 +118,7 @@ public class CourseController {
     public String courseCheck(Model model,@PathVariable Integer studentId){
         List<Course> courseList = courseService.listCourseByStudentId(studentId);
         model.addAttribute("list",courseList);
-        return "courseCheck";
+        return "course/courseCheck";
     }
 
 

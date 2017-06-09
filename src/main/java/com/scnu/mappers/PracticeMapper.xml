@@ -37,4 +37,8 @@
      select count(*) from practice
   </select>
 
+  <select id="listPracticeByStudentId" resultMap="BaseResultMap">
+    SELECT * FROM practice WHERE id IN (SELECT practiceId FROM stu_pra WHERE stuId=#{studentId})
+  </select>
+
 </mapper>

@@ -18,7 +18,7 @@ public interface CourseMapper  extends MyMapper<Course> {
     int reduceNumber(@Param("id")Integer id,@Param("executeTime")Date executeTime);
 
     /**
-     *  根据学生id查询获取所选课程的Id
+     *  根据学生id查询获取所选课程
      * @param studentId
      * @return
      */

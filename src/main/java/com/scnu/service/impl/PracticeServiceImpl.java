@@ -7,6 +7,7 @@ import com.scnu.dao.StuPraMapper;
 import com.scnu.dao.StudentMapper;
 import com.scnu.dao.cache.RedisDao;
 import com.scnu.dto.*;
+import com.scnu.entity.Course;
 import com.scnu.entity.Practice;
 import com.scnu.entity.StuPra;
 import com.scnu.entity.Student;
@@ -21,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -178,5 +178,12 @@ public class PracticeServiceImpl implements PracticeService {
         }else{
             return Result.isNotOK();
         }
+    }
+
+    @Override
+    public List<Practice> listPracticeByStudentId(Integer studentId) {
+        //根据学生id查询获取所选实习的Id
+        List<Practice> result=practiceMapper.listPracticeByStudentId(studentId);
+        return result;
     }
 }

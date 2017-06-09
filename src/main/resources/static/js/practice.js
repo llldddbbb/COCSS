@@ -12,6 +12,9 @@ var practice = {
         },
         execution: function (practiceId, md5) {
             return '/practice/' + practiceId + '/' + md5 + '/execution';
+        },
+        check:function(){
+            return "/practice/check";
         }
     },
 
@@ -66,6 +69,7 @@ var practice = {
             }else{
                 $("#header-info").html("欢迎你:"+stuName);
                 $("#logout").show();
+                $("#check").show();
             }
 
             //已经登录
@@ -162,6 +166,10 @@ var practice = {
         $.cookie('stuName',  "",{path:"/practice"});
         //刷新页面
         window.location.reload();
+    },
+    check:function(){
+        var studentId = $.cookie('studentId');
+        window.location.href=this.URL.check()+"/"+studentId;
     }
 
 }

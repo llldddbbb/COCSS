@@ -38,7 +38,7 @@ public class PracticeController {
         PageBean pageBean=new PageBean(1,10);
         List<Practice> practices = practiceService.listPractice(pageBean).getRows();
         model.addAttribute("list",practices);
-        return "practiceList";
+        return "practice/practiceList";
     }
 
     /**
@@ -58,7 +58,7 @@ public class PracticeController {
             return "forward:/practice/list";
         }
         model.addAttribute("practice", practice);
-        return "practiceDetail";
+        return "practice/practiceDetail";
     }
 
     /**
@@ -112,6 +112,13 @@ public class PracticeController {
     public Result time() {
         Date now = new Date();
         return Result.ok(now.getTime());
+    }
+
+    @RequestMapping("/check/{studentId}")
+    public String courseCheck(Model model,@PathVariable Integer studentId){
+        List<Practice> practiceList = practiceService.listPracticeByStudentId(studentId);
+        model.addAttribute("list",practiceList);
+        return "practice/practiceCheck";
     }
 
 
