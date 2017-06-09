@@ -86,7 +86,6 @@ var course = {
                     //时间判断 计时交互
                     course.countDown(courseId, nowTime, startTime, endTime);
                 } else {
-                    console.log('result: ' + result);
                     alert('result: ' + result);
                 }
             });
@@ -138,7 +137,6 @@ var course = {
     },
 
     countDown: function (courseId, nowTime, startTime, endTime) {
-        console.log(courseId + '_' + nowTime + '_' + startTime + '_' + endTime);
         var courseBox = $('#course-box');
         if (nowTime > endTime) {
             //选课结束

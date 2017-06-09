@@ -80,6 +80,11 @@ public class StuPra {
         this.stuId = stuId;
     }
 
+    public StuPra(Integer practiceId, Integer stuId) {
+        this.practiceId = practiceId;
+        this.stuId = stuId;
+    }
+
     public StuPra() {
     }
 }

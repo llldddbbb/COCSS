@@ -15,6 +15,9 @@ var practice = {
         },
         check:function(){
             return "/practice/check";
+        },
+        rollback:function(practiceId){
+            return '/practice/' + practiceId + '/rollback';
         }
     },
 
@@ -170,6 +173,34 @@ var practice = {
     check:function(){
         var studentId = $.cookie('studentId');
         window.location.href=this.URL.check()+"/"+studentId;
+    },
+
+    rollbackSeckill: function (practiceId) {
+        layer.confirm('你确定要退选？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            var url = practice.URL.rollback(practiceId);
+            $.post(url, {}, function (result) {
+                if (result && result['success']) {
+                    var killResult = result['data'];
+                    var state = killResult['state'];
+                    var stateInfo = killResult['stateInfo'];
+                    //显示退选结果
+                    layer.alert(stateInfo, {icon: 6,yes: function(){
+                        //刷新页面
+                        window.location.reload();
+                    }});
+                }else{
+                    layer.alert(result.msg, {icon: 5,yes: function(){
+                        //刷新页面
+                        window.location.href="/practice/"+practiceId+"/detail";
+                    }});
+                }
+
+            });
+        }, function(){
+
+        });
     }
 
 }

@@ -24,6 +24,14 @@ public interface PracticeMapper extends MyMapper<Practice> {
      */
     List<Practice> listPracticeByStudentId(@Param("studentId")Integer studentId);
 
+    /**
+     * 增加课程数量
+     * @param id
+     * @param executeTime
+     * @return 执行的记录数，>1执行成功，=0执行失败
+     */
+    int addNumber(@Param("id")Integer id,@Param("executeTime")Date executeTime);
+
 
 
 }

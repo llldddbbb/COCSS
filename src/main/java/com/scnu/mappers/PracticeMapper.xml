@@ -21,10 +21,16 @@
     and number &gt; 0
   </update>
 
-
-
   <select id="listPracticeByStudentId" resultMap="BaseResultMap">
     SELECT * FROM practice WHERE id IN (SELECT practiceId FROM stu_pra WHERE stuId=#{studentId})
   </select>
+
+  <update id="addNumber">
+    update practice
+    set number=number+1
+    where id=#{id}
+    and startTime &lt;= #{executeTime}
+    and endTime &gt;= #{executeTime}
+  </update>
 
 </mapper>

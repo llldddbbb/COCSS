@@ -1,5 +1,6 @@
 package com.scnu.controller;
 
+import com.alibaba.druid.util.StringUtils;
 import com.scnu.dto.Execution;
 import com.scnu.dto.Exposer;
 import com.scnu.dto.PageBean;
@@ -118,6 +119,27 @@ public class PracticeController {
         List<Practice> practiceList = practiceService.listPracticeByStudentId(studentId);
         model.addAttribute("list",practiceList);
         return "practice/practiceCheck";
+    }
+
+    @RequestMapping(value = "/{practiceId}/rollback",method = RequestMethod.POST)
+    @ResponseBody
+    public Result rollback(@PathVariable("practiceId") Integer practiceId,
+                           @CookieValue(value = "studentId", required = false) Integer studentId,
+                           @CookieValue(value = "studentMD5", required = false) String studentMD5) {
+        if (studentId == null|| StringUtils.isEmpty(studentMD5)) {
+            return Result.isNotOK("未登录");
+        }
+        try {
+            Execution execution = practiceService.rollBackPractice(practiceId, studentId,studentMD5);
+            return Result.ok(execution);
+        } catch (CloseException e2) {
+            Execution execution = new Execution(practiceId, StateEnum.END);
+            return Result.ok(execution);
+        } catch (Exception e) {
+            Execution execution = new Execution(practiceId, StateEnum.DATE_REWRITE);
+            return Result.ok(execution);
+        }
+
     }
 
 

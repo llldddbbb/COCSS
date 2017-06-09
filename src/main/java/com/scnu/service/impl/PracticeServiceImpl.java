@@ -7,8 +7,8 @@ import com.scnu.dao.StuPraMapper;
 import com.scnu.dao.StudentMapper;
 import com.scnu.dao.cache.RedisDao;
 import com.scnu.dto.*;
-import com.scnu.entity.Course;
 import com.scnu.entity.Practice;
+import com.scnu.entity.StuCou;
 import com.scnu.entity.StuPra;
 import com.scnu.entity.Student;
 import com.scnu.enums.StateEnum;
@@ -184,5 +184,41 @@ public class PracticeServiceImpl implements PracticeService {
         //根据学生id查询获取所选实习的Id
         List<Practice> result=practiceMapper.listPracticeByStudentId(studentId);
         return result;
+    }
+
+    @Transactional//开启事务
+    @Override
+    public Execution rollBackPractice(int id, int studentId, String studentMD5) throws CloseException, CourseException {
+        if (studentMD5==null) {
+            throw new CourseException("no login");//未登录
+        }
+        //判断token是否正确，根据studentId获取student，生成studentMD5，与页面传来的进行对比
+        Student student = studentMapper.selectByPrimaryKey(studentId);
+        if(!studentMD5.equals(SecureUtil.getMD5(student))){
+            throw new CourseException("practice data rewrite");//数据被重写了
+        }
+        try {
+            //删除抢课信息
+            int resultNum = stuPraMapper.delete(new StuPra(id,studentId));
+            if (resultNum <= 0) {
+                throw new CourseException("inner error");
+            } else {
+                //库存+1
+                Date nowTime = new Date();
+                int updateCount = practiceMapper.addNumber(id, nowTime);
+                if (updateCount <= 0) {
+                    //没有更新库存记录，说明秒杀结束
+                    throw new CloseException("practice is closed");
+                } else {
+                    //执行成功,返回成功秒杀的信息
+                    return new Execution(id, StateEnum.SUCCESS);
+                }
+            }
+        } catch (CloseException e1) {
+            throw e1;
+        } catch (Exception e) {
+            //所有编译期异常转化为运行期异常
+            throw new CourseException("inner error :" + e.getMessage());
+        }
     }
 }

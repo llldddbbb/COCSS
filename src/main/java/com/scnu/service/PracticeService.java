@@ -76,5 +76,16 @@ public interface PracticeService {
      */
     List<Practice> listPracticeByStudentId(Integer studentId);
 
+    /**
+     * 回滚执行
+     * @param id
+     * @param studentId
+     * @param studentMD5
+     * @return
+     * @throws CloseException
+     * @throws CourseException
+     */
+    Execution rollBackPractice(int id, int studentId, String studentMD5)throws CloseException,  CourseException;
+
 
 }

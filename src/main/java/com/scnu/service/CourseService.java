@@ -80,11 +80,9 @@ public interface CourseService {
      * 回滚执行
      * @param id
      * @param studentId
-     * @param md5
      * @param studentMD5
      * @return
      * @throws CloseException
-     * @throws RepeatException
      * @throws CourseException
      */
     Execution rollBackCourse(int id, int studentId, String studentMD5)throws CloseException,  CourseException;
