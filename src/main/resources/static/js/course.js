@@ -15,6 +15,9 @@ var course = {
         },
         check:function(){
             return "/course/check";
+        },
+        rollback:function(courseId){
+            return '/course/' + courseId + '/rollback';
         }
     },
 
@@ -102,15 +105,14 @@ var course = {
                     //开启选课
                     //获取选课地址
                     var md5 = exposer['md5'];
-                    var killUrl = course.URL.execution(courseId, md5);
-                    console.log("killUrl: " + killUrl);
+                    var url = course.URL.execution(courseId, md5);
                     //绑定一次点击事件
                     $('#killBtn').one('click', function () {
                         //执行选课请求
                         //1.先禁用按钮
                         $(this).addClass('disabled');//,<-$(this)===('#killBtn')->
                         //2.发送选课请求执行选课
-                        $.post(killUrl, {}, function (result) {
+                        $.post(url, {}, function (result) {
                             if (result && result['success']) {
                                 var killResult = result['data'];
                                 var state = killResult['state'];
@@ -169,6 +171,34 @@ var course = {
     check:function(){
         var studentId = $.cookie('studentId');
         window.location.href=this.URL.check()+"/"+studentId;
+    },
+
+    rollbackSeckill: function (courseId) {
+        layer.confirm('你确定要退选？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            var url = course.URL.rollback(courseId);
+            $.post(url, {}, function (result) {
+                if (result && result['success']) {
+                    var killResult = result['data'];
+                    var state = killResult['state'];
+                    var stateInfo = killResult['stateInfo'];
+                    //显示退选结果
+                    layer.alert(stateInfo, {icon: 6,yes: function(){
+                        //刷新页面
+                        window.location.reload();
+                    }});
+                }else{
+                    layer.alert(result.msg, {icon: 5,yes: function(){
+                        //刷新页面
+                        window.location.href="/course/"+courseId+"/detail";
+                    }});
+                }
+
+            });
+        }, function(){
+
+        });
     }
 
 }

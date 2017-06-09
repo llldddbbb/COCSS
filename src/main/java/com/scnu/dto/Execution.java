@@ -4,7 +4,7 @@ import com.scnu.enums.StateEnum;
 
 /**
  * Created by ldb on 2017/5/30.
- * 封装抢课结果
+ * 封装执行结果
  */
 public class Execution {
 

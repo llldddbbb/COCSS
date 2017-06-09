@@ -89,7 +89,6 @@ public class PracticeController {
         if (studentId == null) {
             return Result.isNotOK("未注册");
         }
-        Result result;
         try {
             Execution execution = practiceService.executePractice(practiceId, studentId, md5,studentMD5);
             return Result.ok(execution);

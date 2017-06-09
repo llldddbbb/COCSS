@@ -1,5 +1,6 @@
 package com.scnu.controller;
 
+import com.alibaba.druid.util.StringUtils;
 import com.scnu.dto.Execution;
 import com.scnu.dto.Exposer;
 import com.scnu.dto.PageBean;
@@ -81,6 +82,14 @@ public class CourseController {
         return result;
     }
 
+    /**
+     * 执行选课
+     * @param courseId
+     * @param md5
+     * @param studentId
+     * @param studentMD5
+     * @return
+     */
     @RequestMapping(value = "/{courseId}/{md5}/execution",method = RequestMethod.POST)
     @ResponseBody
     public Result execute(@PathVariable("courseId") Integer courseId, @PathVariable("md5") String md5,
@@ -89,7 +98,6 @@ public class CourseController {
         if (studentId == null) {
             return Result.isNotOK("未注册");
         }
-        Result result;
         try {
             Execution execution = courseService.executeCourse(courseId, studentId, md5,studentMD5);
             return Result.ok(execution);
@@ -106,7 +114,10 @@ public class CourseController {
 
     }
 
-    //获取系统时间
+    /**
+     * 获取系统时间
+     * @return
+     */
     @RequestMapping(value = "/time/now", method = RequestMethod.GET)
     @ResponseBody
     public Result time() {
@@ -114,12 +125,41 @@ public class CourseController {
         return Result.ok(now.getTime());
     }
 
+    /**
+     * 查看选课信息
+     * @param model
+     * @param studentId
+     * @return
+     */
     @RequestMapping("/check/{studentId}")
     public String courseCheck(Model model,@PathVariable Integer studentId){
         List<Course> courseList = courseService.listCourseByStudentId(studentId);
         model.addAttribute("list",courseList);
         return "course/courseCheck";
     }
+
+    @RequestMapping(value = "/{courseId}/rollback",method = RequestMethod.POST)
+    @ResponseBody
+    public Result rollback(@PathVariable("courseId") Integer courseId,
+                          @CookieValue(value = "studentId", required = false) Integer studentId,
+                          @CookieValue(value = "studentMD5", required = false) String studentMD5) {
+        if (studentId == null|| StringUtils.isEmpty(studentMD5)) {
+            return Result.isNotOK("未登录");
+        }
+        try {
+            Execution execution = courseService.rollBackCourse(courseId, studentId,studentMD5);
+            return Result.ok(execution);
+        } catch (CloseException e2) {
+            Execution execution = new Execution(courseId, StateEnum.END);
+            return Result.ok(execution);
+        } catch (Exception e) {
+            Execution execution = new Execution(courseId, StateEnum.DATE_REWRITE);
+            return Result.ok(execution);
+        }
+
+    }
+
+
 
 
 
