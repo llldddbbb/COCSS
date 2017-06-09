@@ -22,24 +22,16 @@
     and number &gt; 0
   </update>
 
-  <select id="listCourse" resultMap="BaseResultMap" parameterType="Map">
-    select * from course
-    <if test="start!=null and pageSize!=null">
-      limit #{start},#{pageSize}
-    </if>
-  </select>
-
-  <select id="getCourseById" resultType="Course">
-    select * from course
-    where id=#{id}
-  </select>
-
-  <select id="getCourseCount" resultType="Integer">
-     select count(*) from course
-  </select>
-
   <select id="listCourseByStudentId" resultMap="BaseResultMap">
     SELECT * FROM course WHERE id IN (SELECT courseId FROM stu_cou WHERE stuId=#{studentId})
   </select>
+
+  <update id="addNumber">
+    update course
+    set number=number+1
+    where id=#{id}
+    and startTime &lt;= #{executeTime}
+    and endTime &gt;= #{executeTime}
+  </update>
 
 </mapper>

@@ -6,7 +6,6 @@
         <result column="stuId" property="stuId" jdbcType="INTEGER"/>
         <result column="state" property="state" jdbcType="INTEGER"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
-        <association column="courseId" property="course" select="com.scnu.dao.CourseMapper.getCourseById"></association>
     </resultMap>
 
     <insert id="insertStuCou">
@@ -14,10 +13,6 @@
         values(#{courseId},#{stuId},0,now())
     </insert>
 
-    <select id="getByStuIdWithCourse" resultMap="BaseResultMap">
-        select * from stu_cou
-        where stuId=#{stuId}
-        and courseId=#{courseId}
-    </select>
+
 
 </mapper>

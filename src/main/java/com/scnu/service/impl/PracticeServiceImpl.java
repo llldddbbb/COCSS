@@ -142,9 +142,8 @@ public class PracticeServiceImpl implements PracticeService {
                     //没有更新库存记录，说明秒杀结束 rollback
                     throw new CloseException("practice is closed");
                 } else {
-                    //秒杀成功,得到成功插入的明细记录,并返回成功秒杀的信息 commit
-                    StuPra success = stuPraMapper.getByStuIdWithPractice(id, studentId);
-                    return new Execution(id, StateEnum.SUCCESS, success);
+                    //秒杀成功,返回成功秒杀的信息 commit
+                    return new Execution(id, StateEnum.SUCCESS);
                 }
             }
         } catch (CloseException e1) {

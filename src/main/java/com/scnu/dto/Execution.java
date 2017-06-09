@@ -1,7 +1,5 @@
 package com.scnu.dto;
 
-import com.scnu.entity.StuCou;
-import com.scnu.entity.StuPra;
 import com.scnu.enums.StateEnum;
 
 /**
@@ -18,29 +16,7 @@ public class Execution {
     //状态的明文标识
     private String stateInfo;
 
-    //当抢课成功时，需要传递抢课成功的课程回去
-    private StuCou stuCou;
 
-    //当抢课成功时，需要传递抢课成功的课程回去
-    private StuPra stuPra;
-
-    //抢课成功返回所有信息
-    public Execution(int id, StateEnum stateEnum, StuCou stuCou) {
-        this.id = id;
-        this.state = stateEnum.getState();
-        this.stateInfo = stateEnum.getInfo();
-        this.stuCou = stuCou;
-    }
-
-    //抢课成功返回所有信息
-    public Execution(int id, StateEnum stateEnum, StuPra stuPra) {
-        this.id = id;
-        this.state = stateEnum.getState();
-        this.stateInfo = stateEnum.getInfo();
-        this.stuPra = stuPra;
-    }
-
-    //抢课失败返回信息
     public Execution(int id, StateEnum stateEnum) {
         this.id = id;
         this.state = stateEnum.getState();
@@ -71,11 +47,5 @@ public class Execution {
         this.stateInfo = stateInfo;
     }
 
-    public StuCou getStuCou() {
-        return stuCou;
-    }
 
-    public void setStuCou(StuCou stuCou) {
-        this.stuCou = stuCou;
-    }
 }

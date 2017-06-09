@@ -21,21 +21,7 @@
     and number &gt; 0
   </update>
 
-  <select id="listPractice" resultMap="BaseResultMap" parameterType="Map">
-    select * from practice
-    <if test="start!=null and pageSize!=null">
-      limit #{start},#{pageSize}
-    </if>
-  </select>
 
-  <select id="getPracticeById" resultType="Practice">
-    select * from practice
-    where id=#{id}
-  </select>
-
-  <select id="getPracticeCount" resultType="Integer">
-     select count(*) from practice
-  </select>
 
   <select id="listPracticeByStudentId" resultMap="BaseResultMap">
     SELECT * FROM practice WHERE id IN (SELECT practiceId FROM stu_pra WHERE stuId=#{studentId})

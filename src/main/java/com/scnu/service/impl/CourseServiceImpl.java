@@ -8,7 +8,7 @@ import com.scnu.dao.StudentMapper;
 import com.scnu.dao.cache.RedisDao;
 import com.scnu.dto.*;
 import com.scnu.entity.Course;
-import com.scnu.entity.StuCou;
+import com.scnu.entity.Practice;
 import com.scnu.entity.Student;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -133,12 +132,11 @@ public class CourseServiceImpl implements CourseService {
                 Date nowTime = new Date();
                 int updateCount = courseMapper.reduceNumber(id, nowTime);
                 if (updateCount <= 0) {
-                    //没有更新库存记录，说明秒杀结束 rollback
+                    //没有更新库存记录，说明秒杀结束
                     throw new CloseException("course is closed");
                 } else {
-                    //秒杀成功,得到成功插入的明细记录,并返回成功秒杀的信息 commit
-                    StuCou success = stuCouMapper.getByStuIdWithCourse(id, studentId);
-                    return new Execution(id, StateEnum.SUCCESS, success);
+                    //秒杀成功,返回成功秒杀的信息
+                    return new Execution(id, StateEnum.SUCCESS);
                 }
             }
         } catch (CloseException e1) {
