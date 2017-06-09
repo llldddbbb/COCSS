@@ -6,6 +6,8 @@ import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
 import com.scnu.exception.RepeatException;
 
+import java.util.List;
+
 /**
  * Created by ldb on 2017/5/30.
  */
@@ -66,6 +68,13 @@ public interface CourseService {
      * @return
      */
     Result deleteCourse(Integer id);
+
+    /**
+     * 获取某学生选课列表
+     * @param studentId
+     * @return
+     */
+    List<Course> listCourseByStudentId(Integer studentId);
 
 
 }

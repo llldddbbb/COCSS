@@ -12,6 +12,9 @@ var course = {
         },
         execution: function (courseId, md5) {
             return '/course/' + courseId + '/' + md5 + '/execution';
+        },
+        check:function(){
+            return "/course/check";
         }
     },
 
@@ -66,6 +69,7 @@ var course = {
             }else{
                 $("#header-info").html("欢迎你:"+stuName);
                 $("#logout").show();
+                $("#check").show();
             }
 
             //已经登录
@@ -147,7 +151,6 @@ var course = {
             }).on('finish.countdown', function () {
                 //时间完成后回调事件
                 //获取选课地址,控制现实逻辑,执行选课
-                console.log('______fininsh.countdown');
                 course.handlerSeckill(courseId, courseBox);
             });
         } else {
@@ -162,6 +165,10 @@ var course = {
         $.cookie('stuName',  "",{path:"/course"});
         //刷新页面
         window.location.reload();
+    },
+    check:function(){
+        var studentId = $.cookie('studentId');
+        window.location.href=this.URL.check()+"/"+studentId;
     }
 
 }

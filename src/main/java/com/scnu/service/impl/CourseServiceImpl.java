@@ -172,4 +172,11 @@ public class CourseServiceImpl implements CourseService {
             return Result.isNotOK();
         }
     }
+
+    @Override
+    public List<Course> listCourseByStudentId(Integer studentId) {
+        //根据学生id查询获取所选课程的Id
+        List<Course> result=courseMapper.listCourseByStudentId(studentId);
+        return result;
+    }
 }

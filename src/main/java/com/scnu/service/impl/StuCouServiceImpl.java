@@ -5,9 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.scnu.dao.CourseMapper;
 import com.scnu.dao.StuCouMapper;
 import com.scnu.dao.StudentMapper;
-import com.scnu.dto.Result;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
+import com.scnu.dto.Result;
 import com.scnu.entity.Course;
 import com.scnu.entity.StuCou;
 import com.scnu.entity.Student;
@@ -15,6 +15,7 @@ import com.scnu.service.StuCouService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,4 +75,6 @@ public class StuCouServiceImpl implements StuCouService{
             return Result.isNotOK();
         }
     }
+
+
 }

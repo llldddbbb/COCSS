@@ -1,9 +1,12 @@
 package com.scnu.service;
 
-import com.scnu.dto.Result;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
+import com.scnu.dto.Result;
+import com.scnu.entity.Course;
 import com.scnu.entity.StuCou;
+
+import java.util.List;
 
 /**
  * Created by ldb on 2017/6/5.
@@ -37,4 +40,6 @@ public interface StuCouService {
      * @return
      */
     Result deleteStuCou(Integer id);
+
+
 }

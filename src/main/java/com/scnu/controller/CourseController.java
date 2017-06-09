@@ -114,6 +114,13 @@ public class CourseController {
         return Result.ok(now.getTime());
     }
 
+    @RequestMapping("/check/{studentId}")
+    public String courseCheck(Model model,@PathVariable Integer studentId){
+        List<Course> courseList = courseService.listCourseByStudentId(studentId);
+        model.addAttribute("list",courseList);
+        return "courseCheck";
+    }
+
 
 
 }

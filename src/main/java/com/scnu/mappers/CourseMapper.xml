@@ -38,4 +38,8 @@
      select count(*) from course
   </select>
 
+  <select id="listCourseByStudentId" resultMap="BaseResultMap">
+    SELECT * FROM course WHERE id IN (SELECT courseId FROM stu_cou WHERE stuId=#{studentId})
+  </select>
+
 </mapper>
