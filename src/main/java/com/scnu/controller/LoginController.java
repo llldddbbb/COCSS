@@ -1,6 +1,6 @@
 package com.scnu.controller;
 
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.Result;
 import com.scnu.entity.Admin;
 import com.scnu.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class LoginController {
      */
     @RequestMapping("/login")
     @ResponseBody
-    public CourseResult checkLogin(Admin admin){
+    public Result checkLogin(Admin admin){
         return  adminService.checkLogin(admin);
     }
 

@@ -3,7 +3,7 @@ package com.scnu.dto;
 /**
  * Created by ldb on 2017/6/1.
  */
-public class CourseResult {
+public class Result {
 
     //响应业务状态
     private boolean success;
@@ -12,40 +12,40 @@ public class CourseResult {
     //响应信息
     private String msg;
 
-    public CourseResult(boolean success, String msg) {
+    public Result(boolean success, String msg) {
         this.success = success;
         this.msg = msg;
     }
 
-    public CourseResult(boolean success, Object data) {
+    public Result(boolean success, Object data) {
         this.success = success;
         this.data = data;
     }
 
-    public CourseResult(boolean success, Object data, String msg) {
+    public Result(boolean success, Object data, String msg) {
         this.success = success;
         this.data = data;
         this.msg = msg;
     }
 
-    public CourseResult(boolean success) {
+    public Result(boolean success) {
         this.success = success;
     }
 
-    public static CourseResult ok(){
-        return new CourseResult(true);
+    public static Result ok(){
+        return new Result(true);
     }
 
-    public static CourseResult isNotOK(){
-        return new CourseResult(false);
+    public static Result isNotOK(){
+        return new Result(false);
     }
 
-    public static CourseResult ok(Object data){
-        return new CourseResult(true,data);
+    public static Result ok(Object data){
+        return new Result(true,data);
     }
 
-    public static CourseResult isNotOK(String msg){
-        return new CourseResult(false,msg);
+    public static Result isNotOK(String msg){
+        return new Result(false,msg);
     }
 
     public boolean isSuccess() {

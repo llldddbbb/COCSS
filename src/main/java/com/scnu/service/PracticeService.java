@@ -1,34 +1,34 @@
 package com.scnu.service;
 
 import com.scnu.dto.*;
-import com.scnu.entity.Course;
+import com.scnu.entity.Practice;
 import com.scnu.entity.Student;
 import com.scnu.exception.CloseException;
-import com.scnu.exception.CourseException;
+import com.scnu.exception.PracticeException;
 import com.scnu.exception.RepeatException;
 
 /**
  * Created by ldb on 2017/5/30.
  */
-public interface CourseService {
+public interface PracticeService {
 
     /**
-     * 查询全部选课
+     * 查询全部实习
      *
      * @return
      */
-    PageResult<Course> listCourse(PageBean pageBean);
+    PageResult<Practice> listPractice(PageBean pageBean);
 
     /**
-     * 查询单个选课
+     * 查询单个实习
      *
      * @param id
      * @return
      */
-    Course getCourse(int id);
+    Practice getPractice(int id);
 
     /**
-     * 选课开启时输出抢课地址，否则输出系统时间
+     * 实习开启时输出抢课地址，否则输出系统时间
      *
      * @param id
      * @return
@@ -44,7 +44,7 @@ public interface CourseService {
      * @param studentMD5
      * @return
      */
-    Execution executeCourse(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException;
+    Execution executePractice(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, PracticeException;
 
 
     /**
@@ -55,25 +55,25 @@ public interface CourseService {
     LoginResult checkLogin(Student student);
 
     /**
-     * 添加选课
-     * @param course
+     * 添加实习
+     * @param practice
      * @return
      */
-    Integer addCourse(Course course);
+    Integer addPractice(Practice practice);
 
     /**
-     * 更新选课
-     * @param course
+     * 更新实习
+     * @param practice
      * @return
      */
-    Integer updateCourse(Course course);
+    Integer updatePractice(Practice practice);
 
     /**
-     * 删除选课
+     * 删除实习
      * @param id
      * @return
      */
-    Result deleteCourse(Integer id);
+    Result deletePractice(Integer id);
 
 
 }

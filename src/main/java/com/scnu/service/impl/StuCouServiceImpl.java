@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.scnu.dao.CourseMapper;
 import com.scnu.dao.StuCouMapper;
 import com.scnu.dao.StudentMapper;
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.Result;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
 import com.scnu.entity.Course;
@@ -66,12 +66,12 @@ public class StuCouServiceImpl implements StuCouService{
     }
 
     @Override
-    public CourseResult deleteStuCou(Integer id) {
+    public Result deleteStuCou(Integer id) {
         int result = stuCouMapper.deleteByPrimaryKey(id);
         if(result >0){
-            return CourseResult.ok();
+            return Result.ok();
         }else{
-            return CourseResult.isNotOK();
+            return Result.isNotOK();
         }
     }
 }

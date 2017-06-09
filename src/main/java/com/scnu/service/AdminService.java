@@ -1,6 +1,6 @@
 package com.scnu.service;
 
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.Result;
 import com.scnu.entity.Admin;
 
 /**
@@ -8,6 +8,6 @@ import com.scnu.entity.Admin;
  */
 public interface AdminService {
 
-    CourseResult checkLogin(Admin admin);
+    Result checkLogin(Admin admin);
 
 }

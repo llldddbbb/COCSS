@@ -7,7 +7,7 @@ import com.scnu.enums.CourseStateEnum;
  * Created by ldb on 2017/5/30.
  * 封装抢课结果
  */
-public class CourseExecution {
+public class Execution {
 
     private int id;
 
@@ -21,7 +21,7 @@ public class CourseExecution {
     private StuCou stuCou;
 
     //抢课成功返回所有信息
-    public CourseExecution(int id, CourseStateEnum courseStateEnum, StuCou stuCou) {
+    public Execution(int id, CourseStateEnum courseStateEnum, StuCou stuCou) {
         this.id = id;
         this.state = courseStateEnum.getState();
         this.stateInfo = courseStateEnum.getInfo();
@@ -29,7 +29,7 @@ public class CourseExecution {
     }
 
     //抢课失败返回信息
-    public CourseExecution(int id, CourseStateEnum courseStateEnum) {
+    public Execution(int id, CourseStateEnum courseStateEnum) {
         this.id = id;
         this.state = courseStateEnum.getState();
         this.stateInfo = courseStateEnum.getInfo();

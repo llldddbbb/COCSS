@@ -3,7 +3,7 @@ package com.scnu.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.scnu.dao.StudentMapper;
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.Result;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
 import com.scnu.entity.Student;
@@ -49,12 +49,12 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public CourseResult deleteStudent(Integer id) {
+    public Result deleteStudent(Integer id) {
         int result = studentMapper.deleteByPrimaryKey(id);
         if(result >0){
-            return CourseResult.ok();
+            return Result.ok();
         }else{
-            return CourseResult.isNotOK();
+            return Result.isNotOK();
         }
     }
 }

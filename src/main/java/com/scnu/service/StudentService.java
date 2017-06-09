@@ -1,6 +1,6 @@
 package com.scnu.service;
 
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.Result;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
 import com.scnu.entity.Student;
@@ -36,5 +36,5 @@ public interface StudentService {
      * @param id
      * @return
      */
-    CourseResult deleteStudent(Integer id);
+    Result deleteStudent(Integer id);
 }

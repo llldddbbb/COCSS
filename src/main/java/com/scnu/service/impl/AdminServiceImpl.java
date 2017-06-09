@@ -1,7 +1,7 @@
 package com.scnu.service.impl;
 
 import com.scnu.dao.AdminMapper;
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.Result;
 import com.scnu.entity.Admin;
 import com.scnu.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,12 @@ public class AdminServiceImpl implements AdminService {
     private AdminMapper adminMapper;
 
     @Override
-    public CourseResult checkLogin(Admin admin) {
+    public Result checkLogin(Admin admin) {
         Admin currentAdmin = adminMapper.checkLogin(admin);
         if(currentAdmin==null){
-            return CourseResult.isNotOK("用户名或密码错误");
+            return Result.isNotOK("用户名或密码错误");
         }
         currentAdmin.setPassword("");
-        return CourseResult.ok(currentAdmin);
+        return Result.ok(currentAdmin);
     }
 }

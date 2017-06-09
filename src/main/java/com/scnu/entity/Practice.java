@@ -5,16 +5,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Column;
 import java.util.Date;
 
-public class Course extends BaseEntity{
+/**
+ * Created by LSY on 2017/6/9.
+ * 实习实体
+ */
+public class Practice extends BaseEntity{
 
-    @Column(name = "courseName")
-    private String courseName;//课程名
+    private String site;//地点
+
+    @Column(name="schoolName")
+    private String schoolName;//学校名称
 
     private Integer number;//数量
-
-    private String teacher;//数量
-
-    private String remark;//备注
 
     @Column(name = "startTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
@@ -28,13 +30,23 @@ public class Course extends BaseEntity{
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;//创建时间
 
+    private String remark;//备注
 
-    public String getCourseName() {
-        return courseName;
+
+    public String getSite() {
+        return site;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
     }
 
     public Integer getNumber() {
@@ -67,14 +79,6 @@ public class Course extends BaseEntity{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
     }
 
     public String getRemark() {

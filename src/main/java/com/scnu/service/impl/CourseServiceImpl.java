@@ -119,7 +119,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional//开启事务
     @Override
-    public CourseExecution executeCourse(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException {
+    public Execution executeCourse(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException {
         if (md5 == null || !md5.equals(getMD5(id)) || studentMD5 == null || !studentMD5.equals(getMD5(studentId))) {
             throw new CourseException("course data rewrite");//数据被重写了
         }
@@ -139,7 +139,7 @@ public class CourseServiceImpl implements CourseService {
                 } else {
                     //秒杀成功,得到成功插入的明细记录,并返回成功秒杀的信息 commit
                     StuCou success = stuCouMapper.getByStuIdWithCourse(id, studentId);
-                    return new CourseExecution(id, CourseStateEnum.SUCCESS, success);
+                    return new Execution(id, CourseStateEnum.SUCCESS, success);
                 }
             }
         } catch (CloseException e1) {
@@ -175,12 +175,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseResult deleteCourse(Integer id) {
+    public Result deleteCourse(Integer id) {
         int result = courseMapper.deleteByPrimaryKey(id);
         if(result >0){
-            return CourseResult.ok();
+            return Result.ok();
         }else{
-            return CourseResult.isNotOK();
+            return Result.isNotOK();
         }
     }
 }

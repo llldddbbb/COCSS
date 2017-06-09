@@ -1,6 +1,6 @@
 package com.scnu.controller.admin;
 
-import com.scnu.dto.CourseResult;
+import com.scnu.dto.Result;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
 import com.scnu.entity.StuCou;
@@ -60,7 +60,7 @@ public class StuCouAdminController {
 
     @RequestMapping(value = "/stuCou/{id}",method = RequestMethod.DELETE)
     @ResponseBody
-    public CourseResult deleteStuCou(@PathVariable Integer id){
+    public Result deleteStuCou(@PathVariable Integer id){
         return stuCouService.deleteStuCou(id);
     }
 

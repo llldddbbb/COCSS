@@ -67,39 +67,39 @@ public class CourseController {
      */
     @RequestMapping(value = "/{id}/exposer", method = RequestMethod.GET)
     @ResponseBody
-    public CourseResult exposer(@PathVariable Integer id) {
-        CourseResult result;
+    public Result exposer(@PathVariable Integer id) {
+        Result result;
         try {
             Exposer exposer = courseService.exportUrl(id);
-            result = CourseResult.ok(exposer);
+            result = Result.ok(exposer);
         } catch (Exception e) {
             e.printStackTrace();
-            result = CourseResult.isNotOK(e.getMessage());
+            result = Result.isNotOK(e.getMessage());
         }
         return result;
     }
 
     @RequestMapping(value = "/{courseId}/{md5}/execution",method = RequestMethod.POST)
     @ResponseBody
-    public CourseResult execute(@PathVariable("courseId") Integer courseId,@PathVariable("md5") String md5,
-                                                   @CookieValue(value = "studentId", required = false) Integer studentId,
-                                                 @CookieValue(value = "studentMD5", required = false) String studentMD5) {
+    public Result execute(@PathVariable("courseId") Integer courseId, @PathVariable("md5") String md5,
+                          @CookieValue(value = "studentId", required = false) Integer studentId,
+                          @CookieValue(value = "studentMD5", required = false) String studentMD5) {
         if (studentId == null) {
-            return CourseResult.isNotOK("未注册");
+            return Result.isNotOK("未注册");
         }
-        CourseResult result;
+        Result result;
         try {
-            CourseExecution execution = courseService.executeCourse(courseId, studentId, md5,studentMD5);
-            return CourseResult.ok(execution);
+            Execution execution = courseService.executeCourse(courseId, studentId, md5,studentMD5);
+            return Result.ok(execution);
         } catch (RepeatException e1) {
-            CourseExecution execution = new CourseExecution(courseId, CourseStateEnum.REPEAT_KILL);
-            return CourseResult.ok(execution);
+            Execution execution = new Execution(courseId, CourseStateEnum.REPEAT_KILL);
+            return Result.ok(execution);
         } catch (CloseException e2) {
-            CourseExecution execution = new CourseExecution(courseId, CourseStateEnum.END);
-            return CourseResult.ok(execution);
+            Execution execution = new Execution(courseId, CourseStateEnum.END);
+            return Result.ok(execution);
         } catch (Exception e) {
-            CourseExecution execution = new CourseExecution(courseId, CourseStateEnum.INNER_ERROR);
-            return CourseResult.ok(execution);
+            Execution execution = new Execution(courseId, CourseStateEnum.INNER_ERROR);
+            return Result.ok(execution);
         }
 
     }
@@ -107,9 +107,9 @@ public class CourseController {
     //获取系统时间
     @RequestMapping(value = "/time/now", method = RequestMethod.GET)
     @ResponseBody
-    public CourseResult time() {
+    public Result time() {
         Date now = new Date();
-        return CourseResult.ok(now.getTime());
+        return Result.ok(now.getTime());
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
