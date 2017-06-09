@@ -1,7 +1,8 @@
 package com.scnu.dto;
 
 import com.scnu.entity.StuCou;
-import com.scnu.enums.CourseStateEnum;
+import com.scnu.entity.StuPra;
+import com.scnu.enums.StateEnum;
 
 /**
  * Created by ldb on 2017/5/30.
@@ -20,19 +21,30 @@ public class Execution {
     //当抢课成功时，需要传递抢课成功的课程回去
     private StuCou stuCou;
 
+    //当抢课成功时，需要传递抢课成功的课程回去
+    private StuPra stuPra;
+
     //抢课成功返回所有信息
-    public Execution(int id, CourseStateEnum courseStateEnum, StuCou stuCou) {
+    public Execution(int id, StateEnum stateEnum, StuCou stuCou) {
         this.id = id;
-        this.state = courseStateEnum.getState();
-        this.stateInfo = courseStateEnum.getInfo();
+        this.state = stateEnum.getState();
+        this.stateInfo = stateEnum.getInfo();
         this.stuCou = stuCou;
     }
 
-    //抢课失败返回信息
-    public Execution(int id, CourseStateEnum courseStateEnum) {
+    //抢课成功返回所有信息
+    public Execution(int id, StateEnum stateEnum, StuPra stuPra) {
         this.id = id;
-        this.state = courseStateEnum.getState();
-        this.stateInfo = courseStateEnum.getInfo();
+        this.state = stateEnum.getState();
+        this.stateInfo = stateEnum.getInfo();
+        this.stuPra = stuPra;
+    }
+
+    //抢课失败返回信息
+    public Execution(int id, StateEnum stateEnum) {
+        this.id = id;
+        this.state = stateEnum.getState();
+        this.stateInfo = stateEnum.getInfo();
     }
 
     public int getId() {

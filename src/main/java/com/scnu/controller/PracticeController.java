@@ -1,12 +1,12 @@
 package com.scnu.controller;
 
 import com.scnu.dto.*;
-import com.scnu.entity.Course;
+import com.scnu.entity.Practice;
 import com.scnu.entity.Student;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.RepeatException;
-import com.scnu.service.CourseService;
+import com.scnu.service.PracticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,14 +19,14 @@ import java.util.List;
  * Created by ldb on 2017/6/1.
  */
 @Controller
-@RequestMapping("/course")//url:模块/资源/{}/细分
-public class CourseController {
+@RequestMapping("/practice")//url:模块/资源/{}/细分
+public class PracticeController {
 
     @Autowired
-    private CourseService courseService;
+    private PracticeService practiceService;
 
     /**
-     * 获取课程列表
+     * 获取实习列表
      *
      * @param model
      * @return
@@ -34,13 +34,13 @@ public class CourseController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         PageBean pageBean=new PageBean(1,10);
-        List<Course> courses = courseService.listCourse(pageBean).getRows();
-        model.addAttribute("list",courses);
-        return "list";
+        List<Practice> practices = practiceService.listPractice(pageBean).getRows();
+        model.addAttribute("list",practices);
+        return "practiceList";
     }
 
     /**
-     * 获取单个课程
+     * 获取单个实习
      *
      * @param id
      * @param model
@@ -49,14 +49,14 @@ public class CourseController {
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
     public String detail(@PathVariable("id") Integer id, Model model) {
         if (id == null) {
-            return "redirect:/course/list";
+            return "redirect:/practice/list";
         }
-        Course course = courseService.getCourse(id);
-        if (course == null) {
-            return "forward:/course/list";
+        Practice practice = practiceService.getPractice(id);
+        if (practice == null) {
+            return "forward:/practice/list";
         }
-        model.addAttribute("course", course);
-        return "detail";
+        model.addAttribute("practice", practice);
+        return "practiceDetail";
     }
 
     /**
@@ -70,7 +70,7 @@ public class CourseController {
     public Result exposer(@PathVariable Integer id) {
         Result result;
         try {
-            Exposer exposer = courseService.exportUrl(id);
+            Exposer exposer = practiceService.exportUrl(id);
             result = Result.ok(exposer);
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,9 +79,9 @@ public class CourseController {
         return result;
     }
 
-    @RequestMapping(value = "/{courseId}/{md5}/execution",method = RequestMethod.POST)
+    @RequestMapping(value = "/{practiceId}/{md5}/execution",method = RequestMethod.POST)
     @ResponseBody
-    public Result execute(@PathVariable("courseId") Integer courseId, @PathVariable("md5") String md5,
+    public Result execute(@PathVariable("practiceId") Integer practiceId, @PathVariable("md5") String md5,
                           @CookieValue(value = "studentId", required = false) Integer studentId,
                           @CookieValue(value = "studentMD5", required = false) String studentMD5) {
         if (studentId == null) {
@@ -89,16 +89,16 @@ public class CourseController {
         }
         Result result;
         try {
-            Execution execution = courseService.executeCourse(courseId, studentId, md5,studentMD5);
+            Execution execution = practiceService.executePractice(practiceId, studentId, md5,studentMD5);
             return Result.ok(execution);
         } catch (RepeatException e1) {
-            Execution execution = new Execution(courseId, StateEnum.REPEAT_KILL);
+            Execution execution = new Execution(practiceId, StateEnum.REPEAT_KILL);
             return Result.ok(execution);
         } catch (CloseException e2) {
-            Execution execution = new Execution(courseId, StateEnum.END);
+            Execution execution = new Execution(practiceId, StateEnum.END);
             return Result.ok(execution);
         } catch (Exception e) {
-            Execution execution = new Execution(courseId, StateEnum.INNER_ERROR);
+            Execution execution = new Execution(practiceId, StateEnum.INNER_ERROR);
             return Result.ok(execution);
         }
 
@@ -115,7 +115,7 @@ public class CourseController {
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
     public LoginResult checkLogin(Student student){
-        return courseService.checkLogin(student);
+        return practiceService.checkLogin(student);
     }
 
 

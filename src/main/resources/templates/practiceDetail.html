@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>实习详情页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 可选的Bootstrap主题文件（一般不使用） -->
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap-theme.min.css"></script>
+
+    <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+    <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container">
+    <div class="panel panel-default text-center">
+        <div class="panel-heading" style="text-align: right">
+            <h4 id="header-info" style="display: inline-block">请登录</h4>
+            <button type="button" id="logout" style="display: none"  class="btn btn-danger btn-sm" onclick="practice.logout()">
+                注销
+            </button>
+        </div>
+        <div>
+            <h1 th:text="${practice.schoolName}"></h1>
+        </div>
+
+        <div class="panel-body">
+            <h2 class="text-danger">
+                <!--显示time图标-->
+                <span class="glyphicon glyphicon-time" style="vertical-align: middle"></span>
+                <!--展示倒计时-->
+                <span class="glyphicon" id="practice-box"></span>
+            </h2>
+        </div>
+    </div>
+</div>
+<!--登录弹出层 输入账号密码-->
+<div id="loginModal" class="modal fade">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-center">
+                    <span class="glyphicon glyphicon-user"> </span>登录:
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-8 col-xs-offset-2">
+                        <input type="text" name="userName" id="userName"
+                               placeholder="填写学号^o^" class="form-control"><br>
+                        <input type="password" name="password" id="password"
+                               placeholder="填写密码^o^" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <!--验证信息-->
+                <span id="loginMessage" class="glyphicon"> </span>
+                <button type="button" id="loginBtn" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-phone"></span>
+                    登录
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+<!--jQery文件,务必在bootstrap.min.js之前引入-->
+<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<!--使用CDN 获取公共js http://www.bootcdn.cn/
+jQuery Cookie操作插件-->
+<script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<!--jQuery countDown倒计时插件-->
+<script src="http://cdn.bootcss.com/jquery.countdown/2.1.0/jquery.countdown.min.js"></script>
+
+<script th:src="@{/js/practice.js}" type="text/javascript"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        //使用EL表达式传入参数
+        practice.detail.init({
+            practiceId:[[${practice.id}]],
+            startTime:[[${practice.startTime.time}]],//毫秒
+            endTime:[[${practice.endTime.time}]]
+        });
+    })
+</script>
+</html>

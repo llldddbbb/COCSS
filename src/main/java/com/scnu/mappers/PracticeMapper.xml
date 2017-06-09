@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.scnu.dao.CourseMapper" >
+<mapper namespace="com.scnu.dao.PracticeMapper" >
 
-  <resultMap id="BaseResultMap" type="com.scnu.entity.Course" >
+  <resultMap id="BaseResultMap" type="com.scnu.entity.Practice" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="courseName" property="courseName" jdbcType="VARCHAR" />
-    <result column="number" property="number" jdbcType="INTEGER" />
-    <result column="teacher" property="teacher" jdbcType="VARCHAR" />
+    <result column="schoolName" property="schoolName" jdbcType="VARCHAR" />
+    <result column="site" property="site" jdbcType="VARCHAR" />
     <result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
     <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
@@ -14,7 +13,7 @@
   </resultMap>
 
   <update id="reduceNumber">
-    update course
+    update practice
     set number=number-1
     where id=#{id}
     and startTime &lt;= #{executeTime}
@@ -22,20 +21,20 @@
     and number &gt; 0
   </update>
 
-  <select id="listCourse" resultMap="BaseResultMap" parameterType="Map">
-    select * from course
+  <select id="listPractice" resultMap="BaseResultMap" parameterType="Map">
+    select * from practice
     <if test="start!=null and pageSize!=null">
       limit #{start},#{pageSize}
     </if>
   </select>
 
-  <select id="getCourseById" resultType="Course">
-    select * from course
+  <select id="getPracticeById" resultType="Practice">
+    select * from practice
     where id=#{id}
   </select>
 
-  <select id="getCourseCount" resultType="Integer">
-     select count(*) from course
+  <select id="getPracticeCount" resultType="Integer">
+     select count(*) from practice
   </select>
 
 </mapper>

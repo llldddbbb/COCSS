@@ -3,7 +3,7 @@ package com.scnu.enums;
 /**
  * Created by ldb on 2017/5/30.
  */
-public enum  CourseStateEnum {
+public enum StateEnum {
 
     SUCCESS(1,"选课成功"),
     END(0,"选课结束"),
@@ -14,7 +14,7 @@ public enum  CourseStateEnum {
     private int state;
     private String info;
 
-    CourseStateEnum(int state, String info) {
+    StateEnum(int state, String info) {
         this.state = state;
         this.info = info;
     }
