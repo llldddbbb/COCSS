@@ -139,7 +139,6 @@ var practice = {
     },
 
     countDown: function (practiceId, nowTime, startTime, endTime) {
-        console.log(practiceId + '_' + nowTime + '_' + startTime + '_' + endTime);
         var practiceBox = $('#practice-box');
         if (nowTime > endTime) {
             //选课结束
@@ -149,12 +148,11 @@ var practice = {
             var killTime = new Date(startTime + 1000);//todo 防止时间偏移
             practiceBox.countdown(killTime, function (event) {
                 //时间格式
-                var format = event.strftime('选课倒计时: %D天 %H时 %M分 %S秒 ');
+                var format = event.strftime('选校倒计时: %D天 %H时 %M分 %S秒 ');
                 practiceBox.html(format);
             }).on('finish.countdown', function () {
                 //时间完成后回调事件
                 //获取选课地址,控制现实逻辑,执行选课
-                console.log('______fininsh.countdown');
                 practice.handlerSeckill(practiceId, practiceBox);
             });
         } else {
