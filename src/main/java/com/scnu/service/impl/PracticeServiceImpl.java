@@ -125,6 +125,11 @@ public class PracticeServiceImpl implements PracticeService {
         }
 
         try {
+            StuPra example=new StuPra(id,studentId);
+            List<StuPra> list = stuPraMapper.select(example);
+            if(list!=null&&list.size()>0){
+                throw new RepeatException("practice repeat");
+            }
             //插入抢课信息
             int resultNum = stuPraMapper.insertStuPra(id, studentId);
             if (resultNum <= 0) {
@@ -148,6 +153,7 @@ public class PracticeServiceImpl implements PracticeService {
             throw e2;
         } catch (Exception e) {
             //所有编译期异常转化为运行期异常
+            e.printStackTrace();
             throw new CourseException("inner error :" + e.getMessage());
         }
     }

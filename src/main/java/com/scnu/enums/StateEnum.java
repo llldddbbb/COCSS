@@ -7,7 +7,7 @@ public enum StateEnum {
 
     SUCCESS(1,"选课成功"),
     END(0,"选课结束"),
-    REPEAT_KILL(-1,"已选"),
+    REPEAT_KILL(-1,"重复选择"),
     INNER_ERROR(-2,"系统异常"),
     DATE_REWRITE(-3,"数据篡改");
 

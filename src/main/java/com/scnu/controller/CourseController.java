@@ -36,7 +36,7 @@ public class CourseController {
         PageBean pageBean=new PageBean(1,10);
         List<Course> courses = courseService.listCourse(pageBean).getRows();
         model.addAttribute("list",courses);
-        return "list";
+        return "courseList";
     }
 
     /**
@@ -56,7 +56,7 @@ public class CourseController {
             return "forward:/course/list";
         }
         model.addAttribute("course", course);
-        return "detail";
+        return "courseDetail";
     }
 
     /**

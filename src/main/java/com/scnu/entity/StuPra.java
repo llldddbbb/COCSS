@@ -75,4 +75,12 @@ public class StuPra {
     public void setStudent(Student student) {
         this.student = student;
     }
+
+    public StuPra(Integer practiceId, Integer stuId) {
+        this.practiceId = practiceId;
+        this.stuId = stuId;
+    }
+
+    public StuPra() {
+    }
 }
