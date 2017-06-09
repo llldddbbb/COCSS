@@ -1,8 +1,9 @@
 package com.scnu.service;
 
-import com.scnu.dto.Result;
+import com.scnu.dto.LoginResult;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
+import com.scnu.dto.Result;
 import com.scnu.entity.Student;
 
 /**
@@ -37,4 +38,11 @@ public interface StudentService {
      * @return
      */
     Result deleteStudent(Integer id);
+
+    /**
+     * 登录验证
+     * @param student
+     * @return
+     */
+    LoginResult checkLogin(Student student);
 }

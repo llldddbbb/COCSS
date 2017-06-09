@@ -16,6 +16,7 @@ import com.scnu.exception.CourseException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.PracticeService;
 import com.scnu.utils.JsonUtil;
+import com.scnu.utils.SecureUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,8 +47,6 @@ public class PracticeServiceImpl implements PracticeService {
     @Value("${REDIS_PRACTICE_KEY}")
     private String REDIS_PRACTICE_KEY;
 
-    //加入盐值，混淆md5
-    private final String salt = "asdfgasrf^&*23*&(hjkKH;sdajhkl&*(&kljf";
 
     @Override
     public PageResult<Practice> listPractice(PageBean pageBean) {
@@ -106,27 +105,28 @@ public class PracticeServiceImpl implements PracticeService {
         }
 
         //抢课开启，返回秒杀商品的id、用给接口加密的md5
-        String md5 = getMD5(id);
+        String md5 = SecureUtil.getMD5(id);
         return new Exposer(true, md5, id);
     }
 
-    private String getMD5(int id) {
-        //添加盐值，混淆MD5
-        String str = id + "/" + salt;
-        return DigestUtils.md5DigestAsHex(str.getBytes());
-    }
 
 
     @Transactional//开启事务
     @Override
     public Execution executePractice(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException {
-        if (md5 == null || !md5.equals(getMD5(id)) || studentMD5 == null || !studentMD5.equals(getMD5(studentId))) {
+        if (md5 == null || !md5.equals(SecureUtil.getMD5(id))||studentMD5==null) {
             throw new CourseException("practice data rewrite");//数据被重写了
         }
-
+        //判断是否token是否正确，根据studentId获取student，生成studentMD5，与页面传来的进行对比
+        Student student = studentMapper.selectByPrimaryKey(studentId);
+        if(!studentMD5.equals(SecureUtil.getMD5(student))){
+            throw new CourseException("practice data rewrite");//数据被重写了
+        }
         try {
-            StuPra example=new StuPra(id,studentId);
+            //判断是否重复选课
+            StuPra example=new StuPra(studentId);
             List<StuPra> list = stuPraMapper.select(example);
+            //如果已经选课，则抛出异常
             if(list!=null&&list.size()>0){
                 throw new RepeatException("practice repeat");
             }
@@ -156,16 +156,6 @@ public class PracticeServiceImpl implements PracticeService {
             e.printStackTrace();
             throw new CourseException("inner error :" + e.getMessage());
         }
-    }
-
-    @Override
-    public LoginResult checkLogin(Student student) {
-        Student result = studentMapper.checkLogin(student.getUserName(), student.getPassword());
-        if(result==null){
-            return new LoginResult(false);
-        }
-        String studentMD5 = getMD5(result.getId());
-        return new LoginResult(result.getId(),studentMD5,true,result.getStuName());
     }
 
 

@@ -16,6 +16,7 @@ import com.scnu.exception.CourseException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.CourseService;
 import com.scnu.utils.JsonUtil;
+import com.scnu.utils.SecureUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,8 +47,6 @@ public class CourseServiceImpl implements CourseService {
     @Value("${REDIS_COURSE_KEY}")
     private String REDIS_COURSE_KEY;
 
-    //加入盐值，混淆md5
-    private final String salt = "asdfgasrf^&*23*&(hjkKH;sdajhkl&*(&kljf";
 
     @Override
     public PageResult<Course> listCourse(PageBean pageBean) {
@@ -106,24 +105,24 @@ public class CourseServiceImpl implements CourseService {
         }
 
         //抢课开启，返回秒杀商品的id、用给接口加密的md5
-        String md5 = getMD5(id);
+        String md5 = SecureUtil.getMD5(id);
         return new Exposer(true, md5, id);
     }
 
-    private String getMD5(int id) {
-        //添加盐值，混淆MD5
-        String str = id + "/" + salt;
-        return DigestUtils.md5DigestAsHex(str.getBytes());
-    }
+
 
 
     @Transactional//开启事务
     @Override
     public Execution executeCourse(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException {
-        if (md5 == null || !md5.equals(getMD5(id)) || studentMD5 == null || !studentMD5.equals(getMD5(studentId))) {
-            throw new CourseException("course data rewrite");//数据被重写了
+        if (md5 == null || !md5.equals(SecureUtil.getMD5(id))||studentMD5==null) {
+            throw new CourseException("practice data rewrite");//数据被重写了
         }
-
+        //判断token是否正确，根据studentId获取student，生成studentMD5，与页面传来的进行对比
+        Student student = studentMapper.selectByPrimaryKey(studentId);
+        if(!studentMD5.equals(SecureUtil.getMD5(student))){
+            throw new CourseException("practice data rewrite");//数据被重写了
+        }
         try {
             //插入抢课信息
             int resultNum = stuCouMapper.insertStuCou(id, studentId);
@@ -150,16 +149,6 @@ public class CourseServiceImpl implements CourseService {
             //所有编译期异常转化为运行期异常
             throw new CourseException("inner error :" + e.getMessage());
         }
-    }
-
-    @Override
-    public LoginResult checkLogin(Student student) {
-        Student result = studentMapper.checkLogin(student.getUserName(), student.getPassword());
-        if(result==null){
-            return new LoginResult(false);
-        }
-        String studentMD5 = getMD5(result.getId());
-        return new LoginResult(result.getId(),studentMD5,true,result.getStuName());
     }
 
 

@@ -76,8 +76,7 @@ public class StuPra {
         this.student = student;
     }
 
-    public StuPra(Integer practiceId, Integer stuId) {
-        this.practiceId = practiceId;
+    public StuPra(Integer stuId) {
         this.stuId = stuId;
     }
 

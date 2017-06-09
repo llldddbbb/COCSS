@@ -45,7 +45,7 @@ var course = {
                     var userName = $('#userName').val();
                     var password = $('#password').val();
                     if (course.validateLogin(userName,password)) {
-                        $.post("/course/login",{userName:userName,password:password},function(result){
+                        $.post("/student/login",{userName:userName,password:password},function(result){
                             if(result&&result['is_Login']){
                                 //写入cookie(关闭浏览器则过期)
                                 $.cookie('studentId', result['studentId'], {path: '/course'});

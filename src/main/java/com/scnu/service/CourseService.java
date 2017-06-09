@@ -2,7 +2,6 @@ package com.scnu.service;
 
 import com.scnu.dto.*;
 import com.scnu.entity.Course;
-import com.scnu.entity.Student;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
 import com.scnu.exception.RepeatException;
@@ -46,13 +45,6 @@ public interface CourseService {
      */
     Execution executeCourse(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException;
 
-
-    /**
-     * 登录验证
-     * @param student
-     * @return
-     */
-    LoginResult checkLogin(Student student);
 
     /**
      * 添加选课

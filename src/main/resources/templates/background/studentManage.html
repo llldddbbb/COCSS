@@ -82,7 +82,7 @@
             var element = layui.element();
             var laypageId = 'pageNav';
 
-            initilData(1, 10);
+            initilData(1, 15);
             //页数据初始化
             //currentIndex：当前页面
             //pageSize：页容量（每页显示的条数）
@@ -103,7 +103,7 @@
                             var studentList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="40"><col width="120"><col width="120"><col width="120"><col width="120"><col width="120"><col width="120"><col width="40"><col width="40"></colgroup>';
+                            html += '<colgroup><col width="40"><col width="120"><col width="80"><col width="80"><col width="200"><col width="60"><col width="40"><col width="40"><col width="40"></colgroup>';
                             html += '<thead><tr><th>编号</th><th>学号</th><th>密码</th><th>姓名</th><th>专业</th><th>年级</th><th>班级</th><th colspan="2">操作</th></tr></thead>';
                             html += '<tbody>';
                             for(var i in studentList){

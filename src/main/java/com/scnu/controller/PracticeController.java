@@ -1,8 +1,10 @@
 package com.scnu.controller;
 
-import com.scnu.dto.*;
+import com.scnu.dto.Execution;
+import com.scnu.dto.Exposer;
+import com.scnu.dto.PageBean;
+import com.scnu.dto.Result;
 import com.scnu.entity.Practice;
-import com.scnu.entity.Student;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.RepeatException;
@@ -112,11 +114,7 @@ public class PracticeController {
         return Result.ok(now.getTime());
     }
 
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    @ResponseBody
-    public LoginResult checkLogin(Student student){
-        return practiceService.checkLogin(student);
-    }
+
 
 
 }
