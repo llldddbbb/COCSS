@@ -1,40 +1,40 @@
 package com.scnu.service;
 
-import com.scnu.dto.Result;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
-import com.scnu.entity.StuCou;
+import com.scnu.dto.Result;
+import com.scnu.entity.StuPra;
 
 /**
  * Created by ldb on 2017/6/5.
  */
-public interface StuCouService {
+public interface StuPraService {
 
     /**
      * 查询全部选课
      *
      * @return
      */
-    PageResult<StuCou> listStuCou(PageBean pageBean);
+    PageResult<StuPra> listStuPra(PageBean pageBean);
 
     /**
      * 添加选课
-     * @param stuCou
+     * @param stuPra
      * @return
      */
-    Integer addStuCou(StuCou stuCou);
+    Integer addStuPra(StuPra stuPra);
 
     /**
      * 更新选课
-     * @param stuCou
+     * @param stuPra
      * @return
      */
-    Integer updateStuCou(StuCou stuCou);
+    Integer updateStuPra(StuPra stuPra);
 
     /**
      * 删除选课
      * @param id
      * @return
      */
-    Result deleteStuCou(Integer id);
+    Result deleteStuPra(Integer id);
 }

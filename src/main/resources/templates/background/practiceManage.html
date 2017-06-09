@@ -59,9 +59,9 @@
 </head>
 <body>
     <fieldset id="dataList" class="layui-elem-field layui-field-title sys-list-field" style="display:none;">
-        <legend style="text-align:center;">课程列表</legend>
+        <legend style="text-align:center;">实习列表</legend>
         <button class="layui-btn" style="margin:10px auto auto auto;display: block" onclick="layui.datalist.addData()">
-            <i class="layui-icon">&#xe608;</i> 添加课程
+            <i class="layui-icon">&#xe608;</i> 添加实习地点
         </button>
         <div class="layui-field-box layui-form">
             <div id="dataContent" class="">
@@ -87,36 +87,36 @@
             //页数据初始化
             //currentIndex：当前页面
             //pageSize：页容量（每页显示的条数）
-            var courseNum;
+            var practiceNum;
             function initilData(currentIndex, pageSize) {
                 var index = layer.load(1);
                 //模拟数据加载
                 setTimeout(function () {
                     layer.close(index);
                     $.ajax({
-                        url:"/admin/course/list/"+currentIndex,
+                        url:"/admin/practice/list/"+currentIndex,
                         type:"GET",
                         data:{
                             pageSize:pageSize
                         },
                         success:function(result){
-                            courseNum=result.total;
-                            var courseList=result.rows;
+                            practiceNum=result.total;
+                            var practiceList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
                             html += '<colgroup><col width="40"><col width="120"><col width="70"><col width="80"><col width="120"><col width="120"><col width="100"><col width="40"><col width="40"></colgroup>';
-                            html += '<thead><tr><th>编号</th><th>课程名称</th><th>剩余数量</th><th>授课教师</th><th>开始时间</th><th>结束时间</th><th>备注</th><th colspan="2">操作</th></tr></thead>';
+                            html += '<thead><tr><th>编号</th><th>实习学校</th><th>剩余数量</th><th>地点</th><th>开始时间</th><th>结束时间</th><th>备注</th><th colspan="2">操作</th></tr></thead>';
                             html += '<tbody>';
-                            for(var i in courseList){
-                                var item=courseList[i];
+                            for(var i in practiceList){
+                                var item=practiceList[i];
                                 if(item.remark==null){
                                     item.remark='';
                                 }
                                 html+='<tr>';
                                 html+='<td>'+item.id+'</td>';
-                                html+='<td>'+item.courseName+'</td>';
+                                html+='<td>'+item.schoolName+'</td>';
                                 html+='<td>'+item.number+'</td>';
-                                html+='<td>'+item.teacher+'</td>';
+                                html+='<td>'+item.site+'</td>';
                                 html+='<td>'+item.startTime+'</td>';
                                 html+='<td>'+item.endTime+'</td>';
                                 html+='<td>'+item.remark+'</td>';
@@ -130,7 +130,7 @@
                             $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
                             laypage({
                                 cont: laypageId,
-                                pages: courseNum/pageSize==0?courseNum/pageSize:courseNum/pageSize+1,
+                                pages: practiceNum/pageSize==0?practiceNum/pageSize:practiceNum/pageSize+1,
                                 groups: 5,
                                 skip: true,
                                 curr: currentIndex,
@@ -152,11 +152,11 @@
             //输出接口，主要是两个函数，一个删除一个编辑
             var datalist = {
                 deleteData: function (id) {
-                    layer.confirm('确定删除这条课程吗？', {
+                    layer.confirm('确定删除这条实习吗？', {
                         btn: ['确定', '取消'] //按钮
                     }, function () {
                         $.ajax({
-                            url:'/admin/course/'+id,
+                            url:'/admin/practice/'+id,
                             data:{},
                             type:'DELETE',
                             success:function (result) {
@@ -165,7 +165,7 @@
                                         closeBtn: 0,
                                         icon: 1
                                     }, function(){
-                                        window.location.href="/admin/courseManage"
+                                        window.location.href="/admin/practiceManage"
                                     });
                                 }else{
                                     layer.alert('删除失败!', {icon: 5});
@@ -178,17 +178,17 @@
                 },
                 editData: function (item) {
                     var html='';
-                    html+='<form class="layui-form layui-form-pane" action="/admin/course" method="post">';
+                    html+='<form class="layui-form layui-form-pane" action="/admin/practice" method="post">';
                     html+='<div style="margin: 20px 0">';
                     html+='<input type="hidden" name="_method" value="put" />';
                     html+='<input type="hidden" name="id" value="'+item.id+'" />';
                     html+='<input type="hidden" name="createTime" value="'+item.createTime+'" />';
-                    html+='<label class="layui-form-label" style="border: none" >课程标题:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="courseName"  class="layui-input" value="'+item.courseName+'">';
+                    html+='<label class="layui-form-label" style="border: none" >实习学校:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="schoolName"  class="layui-input" value="'+item.schoolName+'">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >授课教师:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="teacher"  class="layui-input" value="'+item.teacher+'">';
+                    html+='<label class="layui-form-label" style="border: none"  >地点:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="site"  class="layui-input" value="'+item.site+'">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >选课数量:</label>';
@@ -217,21 +217,21 @@
                         type: 1,
                         skin: 'layui-layer-rim', //加上边框
                         area: '520px', //宽高
-                        title:'修改课程',
+                        title:'修改实习',
                         content: html
                     });
                     form.render('radio');  //radio，编辑和添加的时候
                 },
                 addData:function () {
                     var html='';
-                    html+='<form class="layui-form layui-form-pane" action="/admin/course" method="post">';
+                    html+='<form class="layui-form layui-form-pane" action="/admin/practice" method="post">';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none" >课程标题:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="courseName"  class="layui-input" >';
+                    html+='<label class="layui-form-label" style="border: none" >实习学校:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="schoolName"  class="layui-input" >';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >授课教师:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="teacher"  class="layui-input" >';
+                    html+='<label class="layui-form-label" style="border: none"  >地点:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="site"  class="layui-input" >';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >选课数量:</label>';
@@ -261,7 +261,7 @@
                         type: 1,
                         skin: 'layui-layer-rim', //加上边框
                         area: '520px', //宽高
-                        title:'添加课程',
+                        title:'添加实习',
                         content: html
                     });
 
