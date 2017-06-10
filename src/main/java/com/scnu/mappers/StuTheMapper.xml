@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scnu.dao.StuTheMapper">
+    <resultMap id="BaseResultMap" type="com.scnu.entity.StuThe">
+        <id column="thesisId" property="thesisId" jdbcType="INTEGER"/>
+        <result column="stuId" property="stuId" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insertStuThe">
+        insert ignore into stu_the(thesisId,stuId,state,createTime)
+        values(#{thesisId},#{stuId},0,now())
+    </insert>
+
+
+
+</mapper>

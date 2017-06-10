@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>数据列表页面</title>
+    <!-- layui.css -->
+    <link th:href="@{/background/plugin/layui/css/layui.css}" href="../../static/background/plugin/layui/css/layui.css" rel="stylesheet" />
+    <style>
+
+        tr td:not(:nth-child(0)),
+        tr th:not(:nth-child(0)) {
+            text-align: center;
+            overflow:hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            -o-text-overflow:ellipsis;
+            -icab-text-overflow: ellipsis;
+            -khtml-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+        }
+
+        #dataConsole {
+            text-align: center;
+        }
+        /*分页页容量样式*/
+        /*可选*/
+        .layui-laypage {
+            display: block;
+        }
+
+            /*可选*/
+            .layui-laypage > * {
+                float: left;
+            }
+            /*可选*/
+            .layui-laypage .laypage-extend-pagesize {
+                float: right;
+            }
+            /*可选*/
+            .layui-laypage:after {
+                content: ".";
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+
+            /*必须*/
+            .layui-laypage .laypage-extend-pagesize {
+                height: 30px;
+                line-height: 30px;
+                margin: 0px;
+                border: none;
+                font-weight: 400;
+            }
+        /*分页页容量样式END*/
+    </style>
+</head>
+<body>
+    <fieldset id="dataList" class="layui-elem-field layui-field-title sys-list-field" style="display:none;">
+        <legend style="text-align:center;">选论文信息列表</legend>
+        <div class="layui-field-box layui-form">
+            <div id="dataContent" class="">
+                <!--内容区域 ajax获取-->
+            </div>
+            <div id="pageNav"></div>
+        </div>
+    </fieldset>
+    <!-- layui.js -->
+    <script th:src="@{/background/plugin/layui/layui.js}" src="../../static/background/plugin/layui/layui.js"></script>
+    <!-- layui规范化用法 -->
+    <script type="text/javascript" th:inline="javascript">
+        layui.define(['element','laypage', 'layer', 'form'], function (exports) {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form();
+            var laypage = layui.laypage;
+            var element = layui.element();
+            var laypageId = 'pageNav';
+
+            initilData(1, 10);
+            //页数据初始化
+            //currentIndex：当前页面
+            //pageSize：页容量（每页显示的条数）
+            var stuTheNum;
+            function initilData(currentIndex, pageSize) {
+                var index = layer.load(1);
+                //模拟数据加载
+                setTimeout(function () {
+                    layer.close(index);
+                    $.ajax({
+                        url:"/admin/stuThe/list/"+currentIndex,
+                        type:"GET",
+                        data:{
+                            pageSize:pageSize
+                        },
+                        success:function(result){
+                            stuTheNum=result.total;
+                            var stuTheList=result.rows;
+                            var html = '';
+                            html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
+                            html += '<colgroup><col width="80"><col width="80"><col width="160"><col width="80"><col width="80"><col width="120"></colgroup>';
+                            html += '<thead><tr><th>学号</th><th>学生姓名</th><th>所属班级</th><th>所选论文</th><th>授课教师</th><th>选论文时间</th></tr></thead>';
+                            html += '<tbody>';
+                            for(var i in stuTheList){
+                                var item=stuTheList[i];
+                                html+='<tr>';
+                                html+='<td>'+item.student.userName+'</td>';
+                                html+='<td>'+item.student.stuName+'</td>';
+                                html+='<td>'+item.student.gradeName+item.student.majorName+item.student.className+'</td>';
+                                html+='<td>'+item.thesis.thesisName+'</td>';
+                                html+='<td>'+item.thesis.teacher+'</td>';
+                                html+='<td>'+item.createTime+'</td>';
+                                html+='</tr>';
+                            }
+                            html+='</tbody></table>';
+                            $('#dataContent').html(html);
+                            element.init();
+                            $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
+                            laypage({
+                                cont: laypageId,
+                                pages: stuTheNum/pageSize==0?stuTheNum/pageSize:stuTheNum/pageSize+1,
+                                groups: 5,
+                                skip: true,
+                                curr: currentIndex,
+                                jump: function (obj, first) {
+                                    var currentIndex = obj.curr;
+                                    if (!first) {
+                                        initilData(currentIndex, pageSize);
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+
+                }, 500);
+            }
+
+            //输出接口，主要是两个函数，一个删除一个编辑
+            var datalist = {
+                deleteData: function (id) {
+                    layer.confirm('确定删除这条选论文信息吗？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        $.ajax({
+                            url:'/admin/stuThe/'+id,
+                            data:{},
+                            type:'DELETE',
+                            success:function (result) {
+                                if(result.success){
+                                    layer.alert('删除成功!', {
+                                        closeBtn: 0,
+                                        icon: 1
+                                    }, function(){
+                                        window.location.href="/admin/stuTheManage"
+                                    });
+                                }else{
+                                    layer.alert('删除失败!', {icon: 5});
+                                }
+                            }
+                        });
+                    }, function () {
+
+                    });
+                },
+                editData: function (item) {
+                    var html='';
+                    html+='<form class="layui-form layui-form-pane" action="/admin/stuThe" method="post">';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<input type="hidden" name="_method" value="put" />';
+                    html+='<input type="hidden" name="id" value="'+item.id+'" />';
+                    html+='<label class="layui-form-label" style="border: none" >学号:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="userName"  class="layui-input" value="'+item.userName+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >密码:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="password"  class="layui-input" value="'+item.password+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >姓名:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="stuName"  class="layui-input" value="'+item.stuName+'" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >专业:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="majorName" class="layui-input" value="'+item.majorName+'"  >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >年级:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="gradeName"  class="layui-input" value="'+item.gradeName+'" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >班级:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="className"  class="layui-input" value="'+item.className+'" >';
+                    html+='</div>';
+                    html+='<div class="layui-form-item">';
+                    html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
+                    html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="demo1">修改</button>';
+                    html+='<button type="reset" class="layui-btn layui-btn-primary">重置</button>';
+                    html+='</div>';
+                    html+='</div>';
+                    html+='</form>';
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '520px', //宽高
+                        title:'修改选论文信息',
+                        content: html
+                    });
+                    form.render('radio');  //radio，编辑和添加的时候
+                },
+                addData:function () {
+                    var html='';
+                    html+='<form class="layui-form layui-form-pane" action="/admin/stuThe" method="post">';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none" >学号:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="userName"  class="layui-input" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >密码:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="password"  class="layui-input" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >姓名:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="stuName"  class="layui-input" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >专业:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="majorName" class="layui-input"  >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >年级:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="gradeName"  class="layui-input" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >班级:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="className"  class="layui-input" >';
+                    html+='</div>';
+                    html+='<div class="layui-form-item">';
+                    html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
+                    html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="demo1">添加</button>';
+                    html+='<button type="reset" class="layui-btn layui-btn-primary">重置</button>';
+                    html+='</div>';
+                    html+='</div>';
+                    html+='</form>';
+
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '520px', //宽高
+                        title:'添加选论文信息',
+                        content: html
+                    });
+
+                    form.render('radio');  //radio，编辑和添加的时候
+
+                }
+            };
+            exports('datalist', datalist);
+        });
+
+
+
+    </script>
+</body>
+</html>
