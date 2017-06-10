@@ -9,6 +9,7 @@ import com.scnu.dao.cache.RedisDao;
 import com.scnu.dto.*;
 import com.scnu.entity.Course;
 import com.scnu.entity.StuCou;
+import com.scnu.entity.StuPra;
 import com.scnu.entity.Student;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
@@ -156,15 +157,41 @@ public class CourseServiceImpl implements CourseService {
         return courseMapper.insert(course);
     }
 
+    @Transactional//开启事务
     @Override
-    public Integer updateCourse(Course course) {
-        return courseMapper.updateByPrimaryKey(course);
+    public Result updateCourse(Course course) throws CourseException{
+        //添加原则:不影响业务逻辑，用try catch捕获异常
+        int result = courseMapper.updateByPrimaryKey(course);
+        if(result>0){
+            try{
+                //重新设置缓存
+                redisDao.set(REDIS_COURSE_KEY+":"+course.getId(), JsonUtil.objectToJson(course));
+            }catch (Exception e){
+                throw new CourseException("更新缓存出错");
+            }
+            return Result.ok();
+        }else{
+            return Result.isNotOK();
+        }
     }
 
     @Override
-    public Result deleteCourse(Integer id) {
+    public Result deleteCourse(Integer id)  throws CourseException{
+        //查询是否有学生选课
+        StuCou stuCou=new StuCou();
+        stuCou.setCourseId(id);
+        List<StuCou> list = stuCouMapper.select(stuCou);
+        if(list.size()>0){
+            return Result.isNotOK("该课程有学生选课，不能删除");
+        }
         int result = courseMapper.deleteByPrimaryKey(id);
         if(result >0){
+            //删除缓存
+            try {
+                redisDao.del(REDIS_COURSE_KEY+":"+id);
+            }catch (Exception e){
+                throw new CourseException("更新缓存出错");
+            }
             return Result.ok();
         }else{
             return Result.isNotOK();

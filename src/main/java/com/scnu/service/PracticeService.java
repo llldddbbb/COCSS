@@ -53,14 +53,14 @@ public interface PracticeService {
      * @param practice
      * @return
      */
-    Integer addPractice(Practice practice);
+    Result addPractice(Practice practice);
 
     /**
      * 更新实习
      * @param practice
      * @return
      */
-    Integer updatePractice(Practice practice);
+    Result updatePractice(Practice practice)throws CourseException;
 
     /**
      * 删除实习

@@ -159,20 +159,52 @@ public class PracticeServiceImpl implements PracticeService {
 
 
     @Override
-    public Integer addPractice(Practice practice) {
+    public Result addPractice(Practice practice) {
         practice.setCreateTime(new Date());
-        return practiceMapper.insert(practice);
+        int result = practiceMapper.insert(practice);
+        if(result>0){
+            return Result.ok();
+        }else{
+            return Result.isNotOK();
+        }
     }
 
+    @Transactional//开启事务
     @Override
-    public Integer updatePractice(Practice practice) {
-        return practiceMapper.updateByPrimaryKey(practice);
+    public Result updatePractice(Practice practice) throws CourseException{
+        //添加原则:不影响业务逻辑，用try catch捕获异常
+        int result = practiceMapper.updateByPrimaryKey(practice);
+        if(result>0){
+            try{
+                //重新设置缓存
+                redisDao.set(REDIS_PRACTICE_KEY+":"+practice.getId(), JsonUtil.objectToJson(practice));
+            }catch (Exception e){
+                throw new CourseException("更新缓存出错");
+            }
+            return Result.ok();
+        }else{
+            return Result.isNotOK();
+        }
     }
 
+    @Transactional//开启事务
     @Override
-    public Result deletePractice(Integer id) {
+    public Result deletePractice(Integer id) throws CourseException{
+        //查询是否有学生选课
+        StuPra stuPra=new StuPra();
+        stuPra.setPracticeId(id);
+        List<StuPra> list = stuPraMapper.select(stuPra);
+        if(list.size()>0){
+            return Result.isNotOK("该课程有学生选课，不能删除");
+        }
         int result = practiceMapper.deleteByPrimaryKey(id);
         if(result >0){
+            //删除缓存
+            try {
+                redisDao.del(REDIS_PRACTICE_KEY+":"+id);
+            }catch (Exception e){
+                throw new CourseException("更新缓存出错");
+            }
             return Result.ok();
         }else{
             return Result.isNotOK();

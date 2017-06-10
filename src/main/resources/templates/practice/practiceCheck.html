@@ -36,13 +36,16 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody>
-                    <tr th:each="practice:${list}">
+                <tbody  th:switch="${#lists.isEmpty(list)}">
+                    <tr th:case="${false}" th:each="practice:${list}">
                         <td th:text="${practice.schoolName}"></td>
                         <td th:text="${practice.site}"></td>
                         <td th:text="${#calendars.format(practice.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${practice.remark}==null?'无':${practice.remark}"></td>
                         <td><button class="btn btn-danger" th:attr="onclick='practice.rollbackSeckill(\'' + ${practice.id} + '\')'">退选</button></td>
+                    </tr>
+                    <tr th:case="${true}">
+                        <td colspan="5" style="text-align: center">暂无数据</td>
                     </tr>
                 </tbody>
             </table>

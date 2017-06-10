@@ -60,14 +60,14 @@ public interface CourseService {
      * @param course
      * @return
      */
-    Integer updateCourse(Course course);
+    Result updateCourse(Course course) throws CourseException;
 
     /**
      * 删除选课
      * @param id
      * @return
      */
-    Result deleteCourse(Integer id);
+    Result deleteCourse(Integer id) throws CourseException;
 
     /**
      * 获取某学生选课列表

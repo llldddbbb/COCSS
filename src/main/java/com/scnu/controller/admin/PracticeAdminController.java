@@ -4,6 +4,7 @@ import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
 import com.scnu.dto.Result;
 import com.scnu.entity.Practice;
+import com.scnu.exception.CourseException;
 import com.scnu.service.PracticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -49,8 +50,8 @@ public class PracticeAdminController {
 
     @RequestMapping(value = "/practice",method = RequestMethod.POST)
     public String addPractice(Practice practice){
-        Integer result = practiceService.addPractice(practice);
-        if(result>0){
+        Result result =  practiceService.addPractice(practice);
+        if(result.isSuccess()){
             return "redirect:/admin/practiceManage";
         }else{
             return null;
@@ -59,18 +60,28 @@ public class PracticeAdminController {
 
     @RequestMapping(value = "/practice",method = RequestMethod.PUT)
     public String updatePractice(Practice practice){
-        Integer result = practiceService.updatePractice(practice);
-        if(result>0){
-            return "redirect:/admin/practiceManage";
-        }else{
+        Result result;
+        try {
+            result = practiceService.updatePractice(practice);
+            if(result.isSuccess()){
+                return "redirect:/admin/practiceManage";
+            }else{
+                return null;
+            }
+        }catch ( Exception e){
             return null;
         }
+
     }
 
     @RequestMapping(value = "/practice/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public Result deletePractice(@PathVariable Integer id){
-        return practiceService.deletePractice(id);
+        try {
+            return practiceService.deletePractice(id);
+        }catch ( Exception e){
+            return Result.isNotOK("删除失败");
+        }
     }
 
 }

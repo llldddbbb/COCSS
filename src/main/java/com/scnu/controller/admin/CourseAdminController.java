@@ -1,8 +1,8 @@
 package com.scnu.controller.admin;
 
-import com.scnu.dto.Result;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
+import com.scnu.dto.Result;
 import com.scnu.entity.Course;
 import com.scnu.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,18 +59,28 @@ public class CourseAdminController {
 
     @RequestMapping(value = "/course",method = RequestMethod.PUT)
     public String updateCourse(Course course){
-        Integer result = courseService.updateCourse(course);
-        if(result>0){
-            return "redirect:/admin/courseManage";
-        }else{
+        Result result;
+        try{
+            result = courseService.updateCourse(course);
+            if(result.isSuccess()){
+                return "redirect:/admin/courseManage";
+            }else{
+                return null;
+            }
+        }catch (Exception e){
             return null;
         }
+
     }
 
     @RequestMapping(value = "/course/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public Result deleteCourse(@PathVariable Integer id){
-        return courseService.deleteCourse(id);
+        try{
+            return courseService.deleteCourse(id);
+        }catch (Exception e){
+            return Result.isNotOK("删除失败");
+        }
     }
 
 }
