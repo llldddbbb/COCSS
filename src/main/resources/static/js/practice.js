@@ -175,6 +175,7 @@ var practice = {
 
     rollbackSeckill: function (practiceId) {
         layer.confirm('你确定要退选？', {
+            icon: 0,
             btn: ['确认','取消'] //按钮
         }, function(){
             var url = practice.URL.rollback(practiceId);
