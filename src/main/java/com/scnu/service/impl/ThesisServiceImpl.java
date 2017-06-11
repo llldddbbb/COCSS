@@ -43,8 +43,8 @@ public class ThesisServiceImpl implements ThesisService {
     @Autowired
     private RedisDao redisDao;
 
-    @Value("${REDIS_PRACTICE_KEY}")
-    private String REDIS_PRACTICE_KEY;
+    @Value("${REDIS_THESIS_KEY}")
+    private String REDIS_THESIS_KEY;
 
 
     @Override
@@ -75,7 +75,7 @@ public class ThesisServiceImpl implements ThesisService {
         Thesis thesis = null;
         //添加原则:不影响业务逻辑，用try catch捕获异常
         try{
-            thesis= JsonUtil.jsonToPojo(redisDao.get(REDIS_PRACTICE_KEY+":"+id),Thesis.class);
+            thesis= JsonUtil.jsonToPojo(redisDao.get(REDIS_THESIS_KEY+":"+id),Thesis.class);
         }catch (Exception e){
         }
         if(thesis==null){
@@ -88,7 +88,7 @@ public class ThesisServiceImpl implements ThesisService {
                 //将数据序列化存进缓存中
                 //添加原则:不影响业务逻辑，用try catch捕获异常
                 try{
-                    redisDao.set(REDIS_PRACTICE_KEY+":"+id,JsonUtil.objectToJson(thesis));
+                    redisDao.set(REDIS_THESIS_KEY+":"+id,JsonUtil.objectToJson(thesis));
                 }catch (Exception e){
                 }
             }
@@ -176,7 +176,7 @@ public class ThesisServiceImpl implements ThesisService {
         if(result>0){
             try{
                 //重新设置缓存
-                redisDao.set(REDIS_PRACTICE_KEY+":"+thesis.getId(), JsonUtil.objectToJson(thesis));
+                redisDao.set(REDIS_THESIS_KEY+":"+thesis.getId(), JsonUtil.objectToJson(thesis));
             }catch (Exception e){
                 throw new CourseException("更新缓存出错");
             }
@@ -200,7 +200,7 @@ public class ThesisServiceImpl implements ThesisService {
         if(result >0){
             //删除缓存
             try {
-                redisDao.del(REDIS_PRACTICE_KEY+":"+id);
+                redisDao.del(REDIS_THESIS_KEY+":"+id);
             }catch (Exception e){
                 throw new CourseException("更新缓存出错");
             }
