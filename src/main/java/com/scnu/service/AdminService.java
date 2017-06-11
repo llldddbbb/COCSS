@@ -10,4 +10,6 @@ public interface AdminService {
 
     Result checkLogin(Admin admin);
 
+    Admin getAdminByUserName(String userName);
+
 }
