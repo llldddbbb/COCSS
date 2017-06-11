@@ -22,9 +22,9 @@ public class LoginController {
      * 跳转到后台页面
      * @return
      */
-    @RequestMapping("/background")
+    @RequestMapping(value={"/background","/background/index"})
     public String goIndex(){
-        return "/background/index";
+        return "background/index";
     }
 
     /**

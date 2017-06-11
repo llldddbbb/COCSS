@@ -8,7 +8,7 @@
     <result column="password" property="password" jdbcType="VARCHAR" />
   </resultMap>
 
-  <select id="checkLogin" parameterType="Admin" resultMap="BaseResultMap">
+  <select id="checkLogin" parameterType="com.scnu.entity.Admin" resultMap="BaseResultMap">
       select * from admin
       where userName=#{userName}
       and password=#{password}

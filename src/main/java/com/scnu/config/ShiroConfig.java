@@ -58,18 +58,18 @@ public class ShiroConfig {
 
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         LogoutFilter logoutFilter = new LogoutFilter();
-        logoutFilter.setRedirectUrl("/background");
+        logoutFilter.setRedirectUrl("/background/index");
         filters.put("logout", logoutFilter);
         shiroFilterFactoryBean.setFilters(filters);
 
         Map<String, String> filterChainDefinitionManager = new LinkedHashMap<String, String>();
         filterChainDefinitionManager.put("/admin/**", "authc");
         //先暂时设置不拦截
-       // filterChainDefinitionManager.put("/admin/**", "anon");
+        //filterChainDefinitionManager.put("/admin/**", "anon");
         filterChainDefinitionManager.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionManager);
 
-        shiroFilterFactoryBean.setLoginUrl("/background");
+        shiroFilterFactoryBean.setLoginUrl("/background/index");
         shiroFilterFactoryBean.setSuccessUrl("/");
 
         return shiroFilterFactoryBean;
