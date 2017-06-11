@@ -52,7 +52,7 @@ public class PracticeServiceImpl implements PracticeService {
     public PageResult<Practice> listPractice(PageBean pageBean) {
         PageResult<Practice> result=new PageResult<>();
         //PageHelper封装分页逻辑
-        PageHelper.startPage(pageBean.getStart(),pageBean.getPageSize());
+        PageHelper.startPage(pageBean.getPage(),pageBean.getPageSize());
         //获取分页后列表
         List<Practice> practiceList = practiceMapper.selectAll();
 

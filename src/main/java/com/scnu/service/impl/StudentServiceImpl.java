@@ -32,7 +32,7 @@ public class StudentServiceImpl implements StudentService{
     public PageResult<Student> listStudent(PageBean pageBean) {
         PageResult<Student> result=new PageResult<>();
         //PageHelper封装分页逻辑
-        PageHelper.startPage(pageBean.getStart(),pageBean.getPageSize());
+        PageHelper.startPage(pageBean.getPage(),pageBean.getPageSize());
         //获取分页后列表
         List<Student> studentList = studentMapper.selectAll();
         // 取分页信息

@@ -36,7 +36,7 @@ public class StuTheServiceImpl implements StuTheService{
     public PageResult<StuThe> listStuThe(PageBean pageBean) {
         PageResult<StuThe> result=new PageResult<>();
         //PageHelper封装分页逻辑
-        PageHelper.startPage(pageBean.getStart(),pageBean.getPageSize());
+        PageHelper.startPage(pageBean.getPage(),pageBean.getPageSize());
         //获取分页后列表
         List<StuThe> stuTheList = stuTheMapper.selectAll();
         //封装student和course信息

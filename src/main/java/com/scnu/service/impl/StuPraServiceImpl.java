@@ -36,7 +36,7 @@ public class StuPraServiceImpl implements StuPraService{
     public PageResult<StuPra> listStuPra(PageBean pageBean) {
         PageResult<StuPra> result=new PageResult<>();
         //PageHelper封装分页逻辑
-        PageHelper.startPage(pageBean.getStart(),pageBean.getPageSize());
+        PageHelper.startPage(pageBean.getPage(),pageBean.getPageSize());
         //获取分页后列表
         List<StuPra> stuPraList = stuPraMapper.selectAll();
         //封装student和course信息

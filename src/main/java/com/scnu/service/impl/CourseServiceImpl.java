@@ -52,7 +52,7 @@ public class CourseServiceImpl implements CourseService {
     public PageResult<Course> listCourse(PageBean pageBean) {
         PageResult<Course> result=new PageResult<>();
         //PageHelper封装分页逻辑
-        PageHelper.startPage(pageBean.getStart(),pageBean.getPageSize());
+        PageHelper.startPage(pageBean.getPage(),pageBean.getPageSize());
         //获取分页后列表
         List<Course> courseList = courseMapper.selectAll();
 

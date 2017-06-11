@@ -37,7 +37,7 @@ public class StuCouServiceImpl implements StuCouService{
     public PageResult<StuCou> listStuCou(PageBean pageBean) {
         PageResult<StuCou> result=new PageResult<>();
         //PageHelper封装分页逻辑
-        PageHelper.startPage(pageBean.getStart(),pageBean.getPageSize());
+        PageHelper.startPage(pageBean.getPage(),pageBean.getPageSize());
         //获取分页后列表
         List<StuCou> stuCouList = stuCouMapper.selectAll();
         //封装student和course信息
