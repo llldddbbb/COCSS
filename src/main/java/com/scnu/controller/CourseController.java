@@ -8,6 +8,7 @@ import com.scnu.dto.Result;
 import com.scnu.entity.Course;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
+import com.scnu.exception.DataException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,7 @@ public class CourseController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        PageBean pageBean=new PageBean(1,10);
-        List<Course> courses = courseService.listCourse(pageBean).getRows();
+        List<Course> courses = courseService.listCourse(new PageBean()).getRows();
         model.addAttribute("list",courses);
         return "course/courseList";
     }
@@ -101,7 +101,10 @@ public class CourseController {
         try {
             Execution execution = courseService.executeCourse(courseId, studentId, md5,studentMD5);
             return Result.ok(execution);
-        } catch (RepeatException e1) {
+        }catch (DataException e0){
+            Execution execution = new Execution(courseId, StateEnum.DATA_ERROR);
+            return Result.ok(execution);
+        }catch (RepeatException e1) {
             Execution execution = new Execution(courseId, StateEnum.REPEAT_KILL);
             return Result.ok(execution);
         } catch (CloseException e2) {

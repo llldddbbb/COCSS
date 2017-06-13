@@ -28,6 +28,9 @@ public class Course extends BaseEntity{
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;//创建时间
 
+    @Column(name = "is_fifteen")
+    private Integer is_fifteen;//是否15周实习
+
 
     public String getCourseName() {
         return courseName;
@@ -83,5 +86,13 @@ public class Course extends BaseEntity{
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Integer getIs_fifteen() {
+        return is_fifteen;
+    }
+
+    public void setIs_fifteen(Integer is_fifteen) {
+        this.is_fifteen = is_fifteen;
     }
 }

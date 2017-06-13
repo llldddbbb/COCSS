@@ -9,7 +9,8 @@ public enum StateEnum {
     END(0,"选课结束"),
     REPEAT_KILL(-1,"重复选择"),
     INNER_ERROR(-2,"系统异常"),
-    DATE_REWRITE(-3,"数据错误");
+    DATE_REWRITE(-3,"数据错误"),
+    DATA_ERROR(-4,"执行失败，请正确选择实习9/15周的学校");
 
     private int state;
     private String info;

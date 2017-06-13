@@ -8,12 +8,13 @@ import com.scnu.dao.StudentMapper;
 import com.scnu.dao.cache.RedisDao;
 import com.scnu.dto.*;
 import com.scnu.entity.Course;
+import com.scnu.entity.Practice;
 import com.scnu.entity.StuCou;
-import com.scnu.entity.StuPra;
 import com.scnu.entity.Student;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
+import com.scnu.exception.DataException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.CourseService;
 import com.scnu.utils.JsonUtil;
@@ -67,7 +68,22 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getCourse(int id) {
-        return courseMapper.selectByPrimaryKey(id);
+        //添加Redis缓存
+        Course course = null;
+        //添加原则:不影响业务逻辑，用try catch捕获异常
+        try{
+            course= JsonUtil.jsonToPojo(redisDao.get(REDIS_COURSE_KEY+":"+id),Course.class);
+        }catch (Exception e){
+        }
+        if(course==null){
+            //如果缓存中为空，则从数据库中查询
+            course = courseMapper.selectByPrimaryKey(id);
+            try{
+                redisDao.set(REDIS_COURSE_KEY+":"+id,JsonUtil.objectToJson(course));
+            }catch (Exception e){
+            }
+        }
+        return course;
     }
 
     @Override
@@ -114,7 +130,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional//开启事务
     @Override
-    public Execution executeCourse(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException {
+    public Execution executeCourse(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, DataException, CourseException {
         if (md5 == null || !md5.equals(SecureUtil.getMD5(id))||studentMD5==null) {
             throw new CourseException("practice data rewrite");//数据被重写了
         }
@@ -124,6 +140,20 @@ public class CourseServiceImpl implements CourseService {
             throw new CourseException("practice data rewrite");//数据被重写了
         }
         try {
+            //判断是否重复选课
+            StuCou example=new StuCou(studentId);
+            List<StuCou> list = stuCouMapper.select(example);
+            //如果已经选课，则抛出异常
+            if(list!=null&&list.size()>0){
+                throw new RepeatException("practice repeat");
+            }
+
+            //判断是否选课错误
+            Course course = courseMapper.selectByPrimaryKey(id);
+            if (course.getIs_fifteen() != student.getIs_fifteen()) {
+                throw new DataException("practice repeat");
+            }
+
             //插入抢课信息
             int resultNum = stuCouMapper.insertStuCou(id, studentId);
             if (resultNum <= 0) {
@@ -140,7 +170,9 @@ public class CourseServiceImpl implements CourseService {
                     return new Execution(id, StateEnum.SUCCESS);
                 }
             }
-        } catch (CloseException e1) {
+        }catch (DataException e0) {
+            throw e0;
+        }catch (CloseException e1) {
             throw e1;
         } catch (RepeatException e2) {
             throw e2;

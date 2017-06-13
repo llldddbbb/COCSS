@@ -39,6 +39,7 @@ var practice = {
             var studentId = $.cookie('studentId');
             var studentMD5 = $.cookie('studentMD5');
             var stuName = $.cookie('stuName');
+            var is_fifteen = $.cookie('is_fifteen');
             if (studentId==null||studentId==""||studentMD5==null||studentMD5=="") {
                 var loginModal = $('#loginModal');
                 loginModal.modal({
@@ -57,6 +58,7 @@ var practice = {
                                 $.cookie('studentId', result['studentId'], {path: '/practice'});
                                 $.cookie('studentMD5', result['studentMD5'], {path: '/practice'});
                                 $.cookie('stuName', result['stuName'], {path: '/practice'});
+                                $.cookie('is_fifteen', result['is_fifteen'], {path: '/practice'});
                                 //验证通过　　刷新页面
                                 window.location.reload();
                             }else{
@@ -70,9 +72,10 @@ var practice = {
                     }
                 });
             }else{
-                $("#header-info").html("欢迎你:"+stuName);
+                $("#header-info").html(stuName+"&nbsp;实习("+is_fifteen+"周)");
                 $("#logout").show();
                 $("#check").show();
+                $("#back").show();
             }
 
             //已经登录
@@ -145,7 +148,8 @@ var practice = {
             practiceBox.html('选课结束!');
         } else if (nowTime < startTime) {
             //选课未开始,计时事件绑定
-            var killTime = new Date(startTime + 1000);//todo 防止时间偏移
+            practiceBox.html("开选时间: "+formatDate(new Date(startTime))+"(北京)");
+           /* var killTime = new Date(startTime + 1000);//todo 防止时间偏移
             practiceBox.countdown(killTime, function (event) {
                 //时间格式
                 var format = event.strftime('选校倒计时: %D天 %H时 %M分 %S秒 ');
@@ -154,7 +158,7 @@ var practice = {
                 //时间完成后回调事件
                 //获取选课地址,控制现实逻辑,执行选课
                 practice.handlerSeckill(practiceId, practiceBox);
-            });
+            });*/
         } else {
             //选课开始
             practice.handlerSeckill(practiceId, practiceBox);
@@ -165,6 +169,7 @@ var practice = {
         $.cookie('studentId',  "",{path:"/practice"});
         $.cookie('studentMD5', "",{path:"/practice"});
         $.cookie('stuName',  "",{path:"/practice"});
+        $.cookie('is_fifteen',  "",{path:"/practice"});
         //刷新页面
         window.location.reload();
     },
@@ -200,6 +205,9 @@ var practice = {
         }, function(){
 
         });
+    },
+    back:function(){
+        window.location.href="/practice/list";
     }
 
 }

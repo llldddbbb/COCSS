@@ -71,7 +71,7 @@ public class StudentServiceImpl implements StudentService{
             return new LoginResult(false);
         }
         String studentMD5 = SecureUtil.getMD5(result);
-        return new LoginResult(result.getId(),studentMD5,true,result.getStuName());
+        return new LoginResult(result.getId(),studentMD5,true,result.getStuName(),result.getIs_fifteen());
     }
 
 

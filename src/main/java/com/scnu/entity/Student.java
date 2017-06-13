@@ -21,6 +21,9 @@ public class Student extends BaseEntity{
     @Column(name = "majorName")
     private String majorName;//专业
 
+    @Column(name = "is_fifteen")
+    private Integer is_fifteen;//是否15周实习
+
 
     public String getUserName() {
         return userName;
@@ -68,5 +71,13 @@ public class Student extends BaseEntity{
 
     public void setMajorName(String majorName) {
         this.majorName = majorName;
+    }
+
+    public Integer getIs_fifteen() {
+        return is_fifteen;
+    }
+
+    public void setIs_fifteen(Integer is_fifteen) {
+        this.is_fifteen = is_fifteen;
     }
 }

@@ -79,6 +79,10 @@ public class StuCou {
     public StuCou() {
     }
 
+    public StuCou(Integer stuId) {
+        this.stuId = stuId;
+    }
+
     public StuCou(Integer courseId, Integer stuId) {
         this.courseId = courseId;
         this.stuId = stuId;

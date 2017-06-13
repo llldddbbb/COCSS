@@ -24,7 +24,7 @@
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-heading text-center">
-            <h2>实习列表</h2>
+            <h2>电商实习列表</h2>
         </div>
         <div class="panel-body">
             <table class="table table-hover">
@@ -47,7 +47,7 @@
                         <td th:text="${#calendars.format(practice.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${#calendars.format(practice.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${practice.remark}==null?'无':${practice.remark}"></td>
-                        <td><a class="btn btn-success" th:href="'/practice/'+${practice.id}+'/detail'">选择</a></td>
+                        <td><a class="btn btn-success" th:href="'/practice/'+${practice.id}+'/detail'">进入选择</a></td>
                     </tr>
                 </tbody>
             </table>

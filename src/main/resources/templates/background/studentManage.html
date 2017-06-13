@@ -103,8 +103,8 @@
                             var studentList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="40"><col width="120"><col width="80"><col width="80"><col width="200"><col width="60"><col width="40"><col width="40"><col width="40"></colgroup>';
-                            html += '<thead><tr><th>编号</th><th>学号</th><th>密码</th><th>姓名</th><th>专业</th><th>年级</th><th>班级</th><th colspan="2">操作</th></tr></thead>';
+                            html += '<colgroup><col width="40"><col width="120"><col width="80"><col width="80"><col width="200"><col width="60"><col width="60"><col width="60"><col width="40"><col width="40"></colgroup>';
+                            html += '<thead><tr><th>编号</th><th>学号</th><th>密码</th><th>姓名</th><th>专业</th><th>年级</th><th>班级</th><th>实习周数</th><th colspan="2">操作</th></tr></thead>';
                             html += '<tbody>';
                             for(var i in studentList){
                                 var item=studentList[i];
@@ -116,6 +116,7 @@
                                 html+='<td>'+item.majorName+'</td>';
                                 html+='<td>'+item.gradeName+'</td>';
                                 html+='<td>'+item.className+'</td>';
+                                html+='<td>'+item.is_fifteen+'</td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+')\'><i class="layui-icon">&#xe642;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
                                 html+='</tr>';
@@ -200,6 +201,10 @@
                     html+='<label class="layui-form-label" style="border: none"  >班级:</label>';
                     html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="className"  class="layui-input" value="'+item.className+'" >';
                     html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >实习周数:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="is_fifteen"  class="layui-input" value="'+item.is_fifteen+'" >';
+                    html+='</div>';
                     html+='<div class="layui-form-item">';
                     html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
                     html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="demo1">修改</button>';
@@ -242,6 +247,10 @@
                     html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >班级:</label>';
                     html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="className"  class="layui-input" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >实习周数:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="is_fifteen"  class="layui-input" >';
                     html+='</div>';
                     html+='<div class="layui-form-item">';
                     html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';

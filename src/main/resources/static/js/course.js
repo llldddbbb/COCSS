@@ -39,6 +39,7 @@ var course = {
             var studentId = $.cookie('studentId');
             var studentMD5 = $.cookie('studentMD5');
             var stuName = $.cookie('stuName');
+            var is_fifteen = $.cookie('is_fifteen');
             if (studentId==null||studentId==""||studentMD5==null||studentMD5=="") {
                 var loginModal = $('#loginModal');
                 loginModal.modal({
@@ -57,6 +58,7 @@ var course = {
                                 $.cookie('studentId', result['studentId'], {path: '/course'});
                                 $.cookie('studentMD5', result['studentMD5'], {path: '/course'});
                                 $.cookie('stuName', result['stuName'], {path: '/course'});
+                                $.cookie('is_fifteen', result['is_fifteen'], {path: '/course'});
                                 //验证通过　　刷新页面
                                 window.location.reload();
                             }else{
@@ -70,9 +72,10 @@ var course = {
                     }
                 });
             }else{
-                $("#header-info").html("欢迎你:"+stuName);
+                $("#header-info").html(stuName+"&nbsp;实习("+is_fifteen+"周)");
                 $("#logout").show();
                 $("#check").show();
+                $("#back").show();
             }
 
             //已经登录
@@ -143,16 +146,16 @@ var course = {
             courseBox.html('选课结束!');
         } else if (nowTime < startTime) {
             //选课未开始,计时事件绑定
-            var killTime = new Date(startTime + 1000);//todo 防止时间偏移
-            courseBox.countdown(killTime, function (event) {
+            //var killTime = new Date(startTime + 1000);
+            courseBox.html("开选时间: "+formatDate(new Date(startTime))+"(北京)");
+            /*courseBox.countdown(killTime, function (event) {
                 //时间格式
                 var format = event.strftime('选课倒计时: %D天 %H时 %M分 %S秒 ');
-                courseBox.html(format);
             }).on('finish.countdown', function () {
                 //时间完成后回调事件
                 //获取选课地址,控制现实逻辑,执行选课
                 course.handlerSeckill(courseId, courseBox);
-            });
+            });*/
         } else {
             //选课开始
             course.handlerSeckill(courseId, courseBox);
@@ -163,6 +166,7 @@ var course = {
         $.cookie('studentId',  "",{path:"/course"});
         $.cookie('studentMD5', "",{path:"/course"});
         $.cookie('stuName',  "",{path:"/course"});
+        $.cookie('is_fifteen',  "",{path:"/course"});
         //刷新页面
         window.location.reload();
     },
@@ -198,6 +202,19 @@ var course = {
         }, function(){
 
         });
+    },
+    back:function(){
+        window.location.href="/course/list";
     }
 
+};
+
+function formatDate(now) {
+    var year=now.getFullYear();
+    var month=now.getMonth()+1;
+    var date=now.getDate();
+    var hour=now.getHours();
+    var minute=now.getMinutes();
+    var second=now.getSeconds();
+    return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
 }

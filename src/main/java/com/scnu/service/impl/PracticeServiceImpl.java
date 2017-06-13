@@ -14,6 +14,7 @@ import com.scnu.entity.Student;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
+import com.scnu.exception.DataException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.PracticeService;
 import com.scnu.utils.JsonUtil;
@@ -50,9 +51,9 @@ public class PracticeServiceImpl implements PracticeService {
 
     @Override
     public PageResult<Practice> listPractice(PageBean pageBean) {
-        PageResult<Practice> result=new PageResult<>();
+        PageResult<Practice> result = new PageResult<>();
         //PageHelper封装分页逻辑
-        PageHelper.startPage(pageBean.getPage(),pageBean.getPageSize());
+        PageHelper.startPage(pageBean.getPage(), pageBean.getPageSize());
         //获取分页后列表
         List<Practice> practiceList = practiceMapper.selectAll();
 
@@ -67,7 +68,26 @@ public class PracticeServiceImpl implements PracticeService {
 
     @Override
     public Practice getPractice(int id) {
-        return practiceMapper.selectByPrimaryKey(id);
+        //添加Redis缓存
+        Practice practice = null;
+        //添加原则:不影响业务逻辑，用try catch捕获异常
+        try {
+            practice = JsonUtil.jsonToPojo(redisDao.get(REDIS_PRACTICE_KEY + ":" + id), Practice.class);
+        } catch (Exception e) {
+        }
+        if (practice == null) {
+            //如果缓存中为空，则从数据库中查询
+            practice = practiceMapper.selectByPrimaryKey(id);
+            //将数据序列化存进缓存中
+            //添加原则:不影响业务逻辑，用try catch捕获异常
+            try {
+                redisDao.set(REDIS_PRACTICE_KEY + ":" + id, JsonUtil.objectToJson(practice));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return practice;
     }
 
     @Override
@@ -75,22 +95,24 @@ public class PracticeServiceImpl implements PracticeService {
         //添加Redis缓存
         Practice practice = null;
         //添加原则:不影响业务逻辑，用try catch捕获异常
-        try{
-            practice= JsonUtil.jsonToPojo(redisDao.get(REDIS_PRACTICE_KEY+":"+id),Practice.class);
-        }catch (Exception e){
+        try {
+            practice = JsonUtil.jsonToPojo(redisDao.get(REDIS_PRACTICE_KEY + ":" + id), Practice.class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if(practice==null){
+        if (practice == null) {
             //如果缓存中为空，则从数据库中查询
             practice = practiceMapper.selectByPrimaryKey(id);
             //查不到该记录
             if (practice == null) {
                 return new Exposer(false, id);
-            }else{
+            } else {
                 //将数据序列化存进缓存中
                 //添加原则:不影响业务逻辑，用try catch捕获异常
-                try{
-                    redisDao.set(REDIS_PRACTICE_KEY+":"+id,JsonUtil.objectToJson(practice));
-                }catch (Exception e){
+                try {
+                    redisDao.set(REDIS_PRACTICE_KEY + ":" + id, JsonUtil.objectToJson(practice));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -110,26 +132,31 @@ public class PracticeServiceImpl implements PracticeService {
     }
 
 
-
     @Transactional//开启事务
     @Override
-    public Execution executePractice(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException {
-        if (md5 == null || !md5.equals(SecureUtil.getMD5(id))||studentMD5==null) {
+    public Execution executePractice(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, DataException, CourseException {
+        if (md5 == null || !md5.equals(SecureUtil.getMD5(id)) || studentMD5 == null) {
             throw new CourseException("practice data rewrite");//数据被重写了
         }
         //判断是否token是否正确，根据studentId获取student，生成studentMD5，与页面传来的进行对比
         Student student = studentMapper.selectByPrimaryKey(studentId);
-        if(!studentMD5.equals(SecureUtil.getMD5(student))){
+        if (!studentMD5.equals(SecureUtil.getMD5(student))) {
             throw new CourseException("practice data rewrite");//数据被重写了
         }
         try {
             //判断是否重复选课
-            StuPra example=new StuPra(studentId);
+            StuPra example = new StuPra(studentId);
             List<StuPra> list = stuPraMapper.select(example);
             //如果已经选课，则抛出异常
-            if(list!=null&&list.size()>0){
+            if (list != null && list.size() > 0) {
                 throw new RepeatException("practice repeat");
             }
+            //判断是否选课错误
+            Practice practice = practiceMapper.selectByPrimaryKey(id);
+            if (practice.getIs_fifteen() != student.getIs_fifteen()) {
+                throw new DataException("practice repeat");
+            }
+
             //插入抢课信息
             int resultNum = stuPraMapper.insertStuPra(id, studentId);
             if (resultNum <= 0) {
@@ -146,6 +173,8 @@ public class PracticeServiceImpl implements PracticeService {
                     return new Execution(id, StateEnum.SUCCESS);
                 }
             }
+        } catch (DataException e0) {
+            throw e0;
         } catch (CloseException e1) {
             throw e1;
         } catch (RepeatException e2) {
@@ -162,51 +191,51 @@ public class PracticeServiceImpl implements PracticeService {
     public Result addPractice(Practice practice) {
         practice.setCreateTime(new Date());
         int result = practiceMapper.insert(practice);
-        if(result>0){
+        if (result > 0) {
             return Result.ok();
-        }else{
+        } else {
             return Result.isNotOK();
         }
     }
 
     @Transactional//开启事务
     @Override
-    public Result updatePractice(Practice practice) throws CourseException{
+    public Result updatePractice(Practice practice) throws CourseException {
         //添加原则:不影响业务逻辑，用try catch捕获异常
         int result = practiceMapper.updateByPrimaryKey(practice);
-        if(result>0){
-            try{
+        if (result > 0) {
+            try {
                 //重新设置缓存
-                redisDao.set(REDIS_PRACTICE_KEY+":"+practice.getId(), JsonUtil.objectToJson(practice));
-            }catch (Exception e){
+                redisDao.set(REDIS_PRACTICE_KEY + ":" + practice.getId(), JsonUtil.objectToJson(practice));
+            } catch (Exception e) {
                 throw new CourseException("更新缓存出错");
             }
             return Result.ok();
-        }else{
+        } else {
             return Result.isNotOK();
         }
     }
 
     @Transactional//开启事务
     @Override
-    public Result deletePractice(Integer id) throws CourseException{
+    public Result deletePractice(Integer id) throws CourseException {
         //查询是否有学生选课
-        StuPra stuPra=new StuPra();
+        StuPra stuPra = new StuPra();
         stuPra.setPracticeId(id);
         List<StuPra> list = stuPraMapper.select(stuPra);
-        if(list.size()>0){
+        if (list.size() > 0) {
             return Result.isNotOK("该课程有学生选课，不能删除");
         }
         int result = practiceMapper.deleteByPrimaryKey(id);
-        if(result >0){
+        if (result > 0) {
             //删除缓存
             try {
-                redisDao.del(REDIS_PRACTICE_KEY+":"+id);
-            }catch (Exception e){
+                redisDao.del(REDIS_PRACTICE_KEY + ":" + id);
+            } catch (Exception e) {
                 throw new CourseException("更新缓存出错");
             }
             return Result.ok();
-        }else{
+        } else {
             return Result.isNotOK();
         }
     }
@@ -214,24 +243,24 @@ public class PracticeServiceImpl implements PracticeService {
     @Override
     public List<Practice> listPracticeByStudentId(Integer studentId) {
         //根据学生id查询获取所选实习的Id
-        List<Practice> result=practiceMapper.listPracticeByStudentId(studentId);
+        List<Practice> result = practiceMapper.listPracticeByStudentId(studentId);
         return result;
     }
 
     @Transactional//开启事务
     @Override
     public Execution rollBackPractice(int id, int studentId, String studentMD5) throws CloseException, CourseException {
-        if (studentMD5==null) {
+        if (studentMD5 == null) {
             throw new CourseException("no login");//未登录
         }
         //判断token是否正确，根据studentId获取student，生成studentMD5，与页面传来的进行对比
         Student student = studentMapper.selectByPrimaryKey(studentId);
-        if(!studentMD5.equals(SecureUtil.getMD5(student))){
+        if (!studentMD5.equals(SecureUtil.getMD5(student))) {
             throw new CourseException("practice data rewrite");//数据被重写了
         }
         try {
             //删除抢课信息
-            int resultNum = stuPraMapper.delete(new StuPra(id,studentId));
+            int resultNum = stuPraMapper.delete(new StuPra(id, studentId));
             if (resultNum <= 0) {
                 throw new CourseException("inner error");
             } else {

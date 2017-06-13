@@ -36,9 +36,8 @@ public class ThesisController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        PageBean pageBean=new PageBean(1,10);
-        List<Thesis> thesiss = thesisService.listThesis(pageBean).getRows();
-        model.addAttribute("list",thesiss);
+        List<Thesis> thesis = thesisService.listThesis(new PageBean()).getRows();
+        model.addAttribute("list",thesis);
         return "thesis/thesisList";
     }
 

@@ -9,6 +9,7 @@
     <result column="gradeName" property="gradeName" jdbcType="VARCHAR" />
     <result column="className" property="className" jdbcType="VARCHAR" />
     <result column="majorName" property="majorName" jdbcType="VARCHAR" />
+    <result column="is_fifteen" property="is_fifteen" jdbcType="INTEGER" />
   </resultMap>
   <select id="checkLogin" resultMap="BaseResultMap">
     select * from student

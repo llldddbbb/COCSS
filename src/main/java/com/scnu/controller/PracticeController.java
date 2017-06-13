@@ -8,6 +8,7 @@ import com.scnu.dto.Result;
 import com.scnu.entity.Practice;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
+import com.scnu.exception.DataException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.PracticeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,7 @@ public class PracticeController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        PageBean pageBean=new PageBean(1,10);
-        List<Practice> practices = practiceService.listPractice(pageBean).getRows();
+        List<Practice> practices = practiceService.listPractice(new PageBean()).getRows();
         model.addAttribute("list",practices);
         return "practice/practiceList";
     }
@@ -93,7 +93,10 @@ public class PracticeController {
         try {
             Execution execution = practiceService.executePractice(practiceId, studentId, md5,studentMD5);
             return Result.ok(execution);
-        } catch (RepeatException e1) {
+        }catch (DataException e0){
+            Execution execution = new Execution(practiceId, StateEnum.DATA_ERROR);
+            return Result.ok(execution);
+        }catch (RepeatException e1) {
             Execution execution = new Execution(practiceId, StateEnum.REPEAT_KILL);
             return Result.ok(execution);
         } catch (CloseException e2) {

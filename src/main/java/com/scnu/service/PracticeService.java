@@ -4,6 +4,7 @@ import com.scnu.dto.*;
 import com.scnu.entity.Practice;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
+import com.scnu.exception.DataException;
 import com.scnu.exception.RepeatException;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public interface PracticeService {
      * @param studentMD5
      * @return
      */
-    Execution executePractice(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, CourseException;
+    Execution executePractice(int id, int studentId, String md5, String studentMD5) throws CloseException, RepeatException, DataException,CourseException;
 
 
     /**

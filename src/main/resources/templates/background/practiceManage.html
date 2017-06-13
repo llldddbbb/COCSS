@@ -104,8 +104,8 @@
                             var practiceList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="40"><col width="120"><col width="70"><col width="80"><col width="120"><col width="120"><col width="100"><col width="40"><col width="40"></colgroup>';
-                            html += '<thead><tr><th>编号</th><th>实习学校</th><th>剩余数量</th><th>地点</th><th>开始时间</th><th>结束时间</th><th>备注</th><th colspan="2">操作</th></tr></thead>';
+                            html += '<colgroup><col width="40"><col width="120"><col width="70"><col width="80"><col width="120"><col width="120"><col width="40"><col width="100"><col width="40"><col width="40"></colgroup>';
+                            html += '<thead><tr><th>编号</th><th>实习学校</th><th>剩余数量</th><th>地点</th><th>开始时间</th><th>结束时间</th><th>周数</th><th>备注</th><th colspan="2">操作</th></tr></thead>';
                             html += '<tbody>';
                             for(var i in practiceList){
                                 var item=practiceList[i];
@@ -119,6 +119,7 @@
                                 html+='<td>'+item.site+'</td>';
                                 html+='<td>'+item.startTime+'</td>';
                                 html+='<td>'+item.endTime+'</td>';
+                                html+='<td>'+item.is_fifteen+'</td>';
                                 html+='<td>'+item.remark+'</td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+')\'><i class="layui-icon">&#xe642;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
@@ -203,8 +204,12 @@
                     html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="endTime"  class="layui-input" value="'+item.endTime+'" onclick="layui.laydate({elem: this, istime: true,format: \'YYYY-MM-DD hh:mm:ss\'})">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >实习周数:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="is_fifteen"  class="layui-input" value="'+item.is_fifteen+'" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >备注:</label>';
-                    html+='<textarea  style="width:60%;color: #000!important;" lay-verify="required" name="remark"  class="layui-textarea" >'+item.remark+'</textarea>';
+                    html+='<textarea  style="width:60%;color: #000!important;"  name="remark"  class="layui-textarea" >'+item.remark+'</textarea>';
                     html+='</div>';
                     html+='<div class="layui-form-item">';
                     html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
@@ -246,8 +251,12 @@
                     html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="endTime"  class="layui-input" onclick="layui.laydate({elem: this, istime: true,format: \'YYYY-MM-DD hh:mm:ss\'})">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >实习周数:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="is_fifteen"  class="layui-input" >';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >备注:</label>';
-                    html+='<textarea  style="width:60%;color: #000!important;" lay-verify="required" name="remark"  class="layui-textarea" ></textarea>';
+                    html+='<textarea  style="width:60%;color: #000!important;"  name="remark"  class="layui-textarea" ></textarea>';
                     html+='</div>';
                     html+='<div class="layui-form-item">';
                     html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';

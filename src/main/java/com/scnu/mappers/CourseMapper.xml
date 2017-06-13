@@ -11,6 +11,7 @@
     <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_fifteen" property="is_fifteen" jdbcType="INTEGER" />
   </resultMap>
 
   <update id="reduceNumber">

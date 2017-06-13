@@ -18,17 +18,21 @@ public class LoginResult {
     //回调用户名信息
     private String stuName;
 
+    //回调实习周数
+    private Integer is_fifteen;
+
     //登录失败
     public LoginResult(boolean is_Login) {
         this.is_Login = is_Login;
     }
 
     //登录成功
-    public LoginResult(int studentId, String studentMD5, boolean is_Login,String stuName) {
+    public LoginResult(int studentId, String studentMD5, boolean is_Login,String stuName,Integer is_fifteen) {
         this.studentId = studentId;
         this.studentMD5 = studentMD5;
         this.is_Login = is_Login;
         this.stuName=stuName;
+        this.is_fifteen=is_fifteen;
     }
 
     public int getStudentId() {
@@ -61,5 +65,13 @@ public class LoginResult {
 
     public void setStuName(String stuName) {
         this.stuName = stuName;
+    }
+
+    public Integer getIs_fifteen() {
+        return is_fifteen;
+    }
+
+    public void setIs_fifteen(Integer is_fifteen) {
+        this.is_fifteen = is_fifteen;
     }
 }

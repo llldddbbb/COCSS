@@ -32,6 +32,9 @@ public class Practice extends BaseEntity{
 
     private String remark;//备注
 
+    @Column(name = "is_fifteen")
+    private Integer is_fifteen;//是否15周实习
+
 
     public String getSite() {
         return site;
@@ -87,5 +90,13 @@ public class Practice extends BaseEntity{
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Integer getIs_fifteen() {
+        return is_fifteen;
+    }
+
+    public void setIs_fifteen(Integer is_fifteen) {
+        this.is_fifteen = is_fifteen;
     }
 }
