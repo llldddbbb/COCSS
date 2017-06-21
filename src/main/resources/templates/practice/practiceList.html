@@ -35,7 +35,8 @@
                     <th>剩余数量</th>
                     <th>开始时间</th>
                     <th>结束时间</th>
-                    <th>备注</th>
+                    <th>实习周数</th>
+                    <th width="25%">备注</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -46,6 +47,7 @@
                         <td th:text="${practice.number}"></td>
                         <td th:text="${#calendars.format(practice.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${#calendars.format(practice.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${practice.is_fifteen}"></td>
                         <td th:text="${practice.remark}==null?'无':${practice.remark}"></td>
                         <td><a class="btn btn-success" th:href="'/practice/'+${practice.id}+'/detail'">进入选择</a></td>
                     </tr>

@@ -147,7 +147,7 @@ var course = {
         } else if (nowTime < startTime) {
             //选课未开始,计时事件绑定
             //var killTime = new Date(startTime + 1000);
-            courseBox.html("开选时间: "+formatDate(new Date(startTime))+"(北京)");
+            courseBox.html("开选时间: "+formatDate(new Date(startTime))+"(北京时间)");
             /*courseBox.countdown(killTime, function (event) {
                 //时间格式
                 var format = event.strftime('选课倒计时: %D天 %H时 %M分 %S秒 ');
@@ -214,7 +214,16 @@ function formatDate(now) {
     var month=now.getMonth()+1;
     var date=now.getDate();
     var hour=now.getHours();
+    if(hour<10){
+        hour="0"+hour;
+    }
     var minute=now.getMinutes();
+    if(minute<10){
+        minute="0"+minute;
+    }
     var second=now.getSeconds();
+    if(second<10){
+        second="0"+second;
+    }
     return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
 }

@@ -14,6 +14,7 @@ import com.scnu.entity.Student;
 import com.scnu.service.StuPraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -38,12 +39,14 @@ public class StuPraServiceImpl implements StuPraService{
         //PageHelper封装分页逻辑
         PageHelper.startPage(pageBean.getPage(),pageBean.getPageSize());
         //获取分页后列表
-        List<StuPra> stuPraList = stuPraMapper.selectAll();
+        Example example=new Example(StuPra.class);
+        example.setOrderByClause("stuId asc");
+        List<StuPra> stuPraList = stuPraMapper.selectByExample(example);
         //封装student和course信息
         for (StuPra stuPra : stuPraList) {
             Student student = studentMapper.selectByPrimaryKey(stuPra.getStuId());
-            Practice course = courseMapper.selectByPrimaryKey(stuPra.getPracticeId());
-            stuPra.setPractice(course);
+            Practice practice = courseMapper.selectByPrimaryKey(stuPra.getPracticeId());
+            stuPra.setPractice(practice);
             stuPra.setStudent(student);
         }
         // 取分页信息

@@ -34,7 +34,8 @@
                     <th>剩余数量</th>
                     <th>开始时间</th>
                     <th>结束时间</th>
-                    <th>备注</th>
+                    <th>实习周数</th>
+                    <th width="25%">备注</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -45,8 +46,9 @@
                         <td th:text="${course.number}"></td>
                         <td th:text="${#calendars.format(course.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${#calendars.format(course.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${course.is_fifteen}"></td>
                         <td th:text="${course.remark}==null?'无':${course.remark}"></td>
-                        <td><a class="btn btn-success" th:href="'/course/'+${course.id}+'/detail'">进入选课</a></td>
+                        <td><a class="btn btn-success" th:href="'/course/'+${course.id}+'/detail'">进入选择</a></td>
                     </tr>
                 </tbody>
             </table>

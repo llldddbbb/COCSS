@@ -7,10 +7,7 @@ import com.scnu.dao.StuPraMapper;
 import com.scnu.dao.StudentMapper;
 import com.scnu.dao.cache.RedisDao;
 import com.scnu.dto.*;
-import com.scnu.entity.Practice;
-import com.scnu.entity.StuCou;
-import com.scnu.entity.StuPra;
-import com.scnu.entity.Student;
+import com.scnu.entity.*;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
@@ -244,6 +241,15 @@ public class PracticeServiceImpl implements PracticeService {
     public List<Practice> listPracticeByStudentId(Integer studentId) {
         //根据学生id查询获取所选实习的Id
         List<Practice> result = practiceMapper.listPracticeByStudentId(studentId);
+        for (Practice practice : result) {
+            StuPra stuPra=new StuPra();
+            stuPra.setStuId(studentId);
+            stuPra.setPracticeId(practice.getId());
+            List<StuPra> select = stuPraMapper.select(stuPra);
+            if(select!=null && select.size()>0){
+                practice.setSelectTime(select.get(0).getCreateTime());
+            }
+        }
         return result;
     }
 

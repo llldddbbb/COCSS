@@ -60,6 +60,9 @@
 <body>
     <fieldset id="dataList" class="layui-elem-field layui-field-title sys-list-field" style="display:none;">
         <legend style="text-align:center;">选课信息列表</legend>
+        <button class="layui-btn" style="margin:10px auto auto auto;display: block" onclick="layui.datalist.exportExcel()">
+            <i class="layui-icon">&#xe608;</i> 导出信息
+        </button>
         <div class="layui-field-box layui-form">
             <div id="dataContent" class="">
                 <!--内容区域 ajax获取-->
@@ -255,6 +258,9 @@
 
                     form.render('radio');  //radio，编辑和添加的时候
 
+                },
+                exportExcel: function(){
+                    window.location.href="/admin/stuCou/export";
                 }
             };
             exports('datalist', datalist);

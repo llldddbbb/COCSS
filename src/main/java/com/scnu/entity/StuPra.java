@@ -8,7 +8,7 @@ import javax.persistence.Transient;
 import java.util.Date;
 
 @Table(name = "stu_pra")
-public class StuPra {
+public class StuPra{
 
     @Column(name = "practiceId")
     private Integer practiceId;//所属课程

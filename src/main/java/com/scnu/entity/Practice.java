@@ -3,6 +3,7 @@ package com.scnu.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -34,6 +35,10 @@ public class Practice extends BaseEntity{
 
     @Column(name = "is_fifteen")
     private Integer is_fifteen;//是否15周实习
+
+    @Transient
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date selectTime;
 
 
     public String getSite() {
@@ -98,5 +103,13 @@ public class Practice extends BaseEntity{
 
     public void setIs_fifteen(Integer is_fifteen) {
         this.is_fifteen = is_fifteen;
+    }
+
+    public Date getSelectTime() {
+        return selectTime;
+    }
+
+    public void setSelectTime(Date selectTime) {
+        this.selectTime = selectTime;
     }
 }

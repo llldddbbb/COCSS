@@ -5,12 +5,19 @@ import com.scnu.dto.PageResult;
 import com.scnu.dto.Result;
 import com.scnu.entity.StuPra;
 import com.scnu.service.StuPraService;
+import com.scnu.utils.ResponseUtil;
+import com.scnu.utils.WorkbookUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created by ldb on 2017/6/4.
@@ -62,6 +69,15 @@ public class StuPraAdminController {
     @ResponseBody
     public Result deleteStuPra(@PathVariable Integer id){
         return stuPraService.deleteStuPra(id);
+    }
+
+    @RequestMapping("/stuPra/export")
+    public void exportExcel(HttpServletResponse response) throws Exception {
+        Workbook wb = new HSSFWorkbook();
+        PageResult<StuPra> result = stuPraService.listStuPra(new PageBean());
+        List<StuPra> stuPraList = result.getRows();
+        WorkbookUtil.fullExcelDataStuPra(stuPraList, wb);
+        ResponseUtil.exportExcel(response, wb, "电商选实习列表.xls");
     }
 
 }
