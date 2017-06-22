@@ -142,7 +142,7 @@ var thesis = {
             //选课结束
             thesisBox.html('选课结束!');
         } else if (nowTime < startTime) {
-            //选课未开始,计时事件绑定
+           /* //选课未开始,计时事件绑定
             var killTime = new Date(startTime + 1000);//todo 防止时间偏移
             thesisBox.countdown(killTime, function (event) {
                 //时间格式
@@ -152,7 +152,8 @@ var thesis = {
                 //时间完成后回调事件
                 //获取选课地址,控制现实逻辑,执行选课
                 thesis.handlerSeckill(thesisId, thesisBox);
-            });
+            });*/
+            thesisBox.html("开选时间: "+formatDate(new Date(startTime))+"(北京时间)");
         } else {
             //选课开始
             thesis.handlerSeckill(thesisId, thesisBox);
@@ -200,4 +201,23 @@ var thesis = {
         });
     }
 
+}
+
+function formatDate(now) {
+    var year=now.getFullYear();
+    var month=now.getMonth()+1;
+    var date=now.getDate();
+    var hour=now.getHours();
+    if(hour<10){
+        hour="0"+hour;
+    }
+    var minute=now.getMinutes();
+    if(minute<10){
+        minute="0"+minute;
+    }
+    var second=now.getSeconds();
+    if(second<10){
+        second="0"+second;
+    }
+    return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
 }

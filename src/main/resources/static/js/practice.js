@@ -148,7 +148,7 @@ var practice = {
             practiceBox.html('选课结束!');
         } else if (nowTime < startTime) {
             //选课未开始,计时事件绑定
-            practiceBox.html("开选时间: "+formatDate(new Date(startTime))+"(北京)");
+            practiceBox.html("开选时间: "+formatDate(new Date(startTime))+"(北京时间)");
            /* var killTime = new Date(startTime + 1000);//todo 防止时间偏移
             practiceBox.countdown(killTime, function (event) {
                 //时间格式
