@@ -6,11 +6,13 @@ import com.scnu.dto.Exposer;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.Result;
 import com.scnu.entity.Practice;
+import com.scnu.entity.StuPra;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.DataException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.PracticeService;
+import com.scnu.service.StuPraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,9 @@ public class PracticeController {
 
     @Autowired
     private PracticeService practiceService;
+
+    @Autowired
+    private StuPraService stuPraService;
 
     /**
      * 获取实习列表
@@ -119,8 +124,8 @@ public class PracticeController {
 
     @RequestMapping("/check/{studentId}")
     public String courseCheck(Model model,@PathVariable Integer studentId){
-        List<Practice> practiceList = practiceService.listPracticeByStudentId(studentId);
-        model.addAttribute("list",practiceList);
+        List<StuPra> stuPraList = stuPraService.listStuPraByStudentId(studentId);
+        model.addAttribute("list",stuPraList);
         return "practice/practiceCheck";
     }
 

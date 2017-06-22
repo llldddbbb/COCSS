@@ -3,7 +3,6 @@ package com.scnu.service;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.PageResult;
 import com.scnu.dto.Result;
-import com.scnu.entity.Course;
 import com.scnu.entity.StuCou;
 
 import java.util.List;
@@ -40,6 +39,13 @@ public interface StuCouService {
      * @return
      */
     Result deleteStuCou(Integer id);
+
+    /**
+     * 获取某学生选课列表
+     * @param studentId
+     * @return
+     */
+    List<StuCou> listStuCouByStudentId(Integer studentId);
 
 
 }

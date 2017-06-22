@@ -5,6 +5,8 @@ import com.scnu.dto.PageResult;
 import com.scnu.dto.Result;
 import com.scnu.entity.StuThe;
 
+import java.util.List;
+
 /**
  * Created by ldb on 2017/6/5.
  */
@@ -37,4 +39,11 @@ public interface StuTheService {
      * @return
      */
     Result deleteStuThe(Integer id);
+
+    /**
+     * 获取某学生选论文列表
+     * @param studentId
+     * @return
+     */
+    List<StuThe> listStuTheByStudentId(Integer studentId);
 }

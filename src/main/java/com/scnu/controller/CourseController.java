@@ -6,11 +6,13 @@ import com.scnu.dto.Exposer;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.Result;
 import com.scnu.entity.Course;
+import com.scnu.entity.StuCou;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.DataException;
 import com.scnu.exception.RepeatException;
 import com.scnu.service.CourseService;
+import com.scnu.service.StuCouService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,9 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private StuCouService stuCouService;
 
     /**
      * 获取课程列表
@@ -136,8 +141,8 @@ public class CourseController {
      */
     @RequestMapping("/check/{studentId}")
     public String courseCheck(Model model,@PathVariable Integer studentId){
-        List<Course> courseList = courseService.listCourseByStudentId(studentId);
-        model.addAttribute("list",courseList);
+        List<StuCou> stuCouList = stuCouService.listStuCouByStudentId(studentId);
+        model.addAttribute("list",stuCouList);
         return "course/courseCheck";
     }
 

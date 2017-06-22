@@ -34,20 +34,22 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>实习学校</th>
-                    <th width="30%">实习地点</th>
+                    <th>学号</th>
+                    <th>学生姓名</th>
+                    <th width="30%">所选学校</th>
+                    <th >实习地点</th>
                     <th width="16%">创建时间</th>
-                    <th width="25%">备注</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="practice:${list}">
-                        <td th:text="${practice.schoolName}"></td>
-                        <td th:text="${practice.site}"></td>
-                        <td th:text="${#calendars.format(practice.selectTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td th:text="${practice.remark}==null?'无':${practice.remark}"></td>
-                        <td><button class="btn btn-danger" th:attr="onclick='practice.rollbackSeckill(\'' + ${practice.id} + '\')'">退选</button></td>
+                    <tr th:each="stuPra:${list}">
+                        <td th:text="${stuPra.student.userName}"></td>
+                        <td th:text="${stuPra.student.stuName}"></td>
+                        <td th:text="${stuPra.practice.schoolName}"></td>
+                        <td th:text="${stuPra.practice.site}"></td>
+                        <td th:text="${#calendars.format(stuPra.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td><button class="btn btn-danger" th:attr="onclick='practice.rollbackSeckill(\'' + ${stuPra.practice.id} + '\')'">退选</button></td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(list)}" >
                         <td colspan="5" style="text-align: center">暂无数据</td>

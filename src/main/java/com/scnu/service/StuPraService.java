@@ -5,6 +5,8 @@ import com.scnu.dto.PageResult;
 import com.scnu.dto.Result;
 import com.scnu.entity.StuPra;
 
+import java.util.List;
+
 /**
  * Created by ldb on 2017/6/5.
  */
@@ -37,4 +39,11 @@ public interface StuPraService {
      * @return
      */
     Result deleteStuPra(Integer id);
+
+    /**
+     * 获取某学生选实习列表
+     * @param studentId
+     * @return
+     */
+    List<StuPra> listStuPraByStudentId(Integer studentId);
 }

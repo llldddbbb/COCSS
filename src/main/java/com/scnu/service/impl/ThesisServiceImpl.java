@@ -210,12 +210,7 @@ public class ThesisServiceImpl implements ThesisService {
         }
     }
 
-    @Override
-    public List<Thesis> listThesisByStudentId(Integer studentId) {
-        //根据学生id查询获取所选论文的Id
-        List<Thesis> result=thesisMapper.listThesisByStudentId(studentId);
-        return result;
-    }
+
 
     @Transactional//开启事务
     @Override

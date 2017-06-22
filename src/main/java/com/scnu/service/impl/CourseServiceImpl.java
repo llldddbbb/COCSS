@@ -230,21 +230,7 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 
-    @Override
-    public List<Course> listCourseByStudentId(Integer studentId) {
-        //根据学生id查询获取所选课程的Id
-        List<Course> result=courseMapper.listCourseByStudentId(studentId);
-        for (Course course : result) {
-            StuCou stuCou=new StuCou();
-            stuCou.setStuId(studentId);
-            stuCou.setCourseId(course.getId());
-            List<StuCou> select = stuCouMapper.select(stuCou);
-            if(select!=null && select.size()>0){
-                course.setSelectTime(select.get(0).getCreateTime());
-            }
-        }
-        return result;
-    }
+
 
     @Transactional//开启事务
     @Override

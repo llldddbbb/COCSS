@@ -10,12 +10,12 @@ import com.scnu.dto.PageResult;
 import com.scnu.dto.Result;
 import com.scnu.entity.Course;
 import com.scnu.entity.StuCou;
+import com.scnu.entity.StuPra;
 import com.scnu.entity.Student;
 import com.scnu.service.StuCouService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,12 +41,7 @@ public class StuCouServiceImpl implements StuCouService{
         //获取分页后列表
         List<StuCou> stuCouList = stuCouMapper.selectAll();
         //封装student和course信息
-        for (StuCou stuCou : stuCouList) {
-            Student student = studentMapper.selectByPrimaryKey(stuCou.getStuId());
-            Course course = courseMapper.selectByPrimaryKey(stuCou.getCourseId());
-            stuCou.setCourse(course);
-            stuCou.setStudent(student);
-        }
+        this.fullStuThe(stuCouList,studentMapper,courseMapper);
         // 取分页信息
         PageInfo<StuCou> pageInfo = new PageInfo<>(stuCouList);
         long total = pageInfo.getTotal(); //获取总记录数
@@ -73,6 +68,25 @@ public class StuCouServiceImpl implements StuCouService{
             return Result.ok();
         }else{
             return Result.isNotOK();
+        }
+    }
+
+    @Override
+    public List<StuCou> listStuCouByStudentId(Integer studentId) {
+        //根据学生id查询获取所选论文的Id
+        StuCou example =new StuCou();
+        example.setStuId(studentId);
+        List<StuCou> stuCouList=stuCouMapper.select(example);
+        this.fullStuThe(stuCouList,studentMapper,courseMapper);
+        return stuCouList;
+    }
+
+    private void fullStuThe(List<StuCou> stuCouList, StudentMapper studentMapper, CourseMapper courseMapper) {
+        for (StuCou stuCou : stuCouList) {
+            Student student = studentMapper.selectByPrimaryKey(stuCou.getStuId());
+            Course course = courseMapper.selectByPrimaryKey(stuCou.getCourseId());
+            stuCou.setCourse(course);
+            stuCou.setStudent(student);
         }
     }
 

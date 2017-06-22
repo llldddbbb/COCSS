@@ -7,8 +7,6 @@ import com.scnu.exception.CourseException;
 import com.scnu.exception.DataException;
 import com.scnu.exception.RepeatException;
 
-import java.util.List;
-
 /**
  * Created by ldb on 2017/5/30.
  */
@@ -70,12 +68,6 @@ public interface PracticeService {
      */
     Result deletePractice(Integer id);
 
-    /**
-     * 获取某学生选实习列表
-     * @param studentId
-     * @return
-     */
-    List<Practice> listPracticeByStudentId(Integer studentId);
 
     /**
      * 回滚执行

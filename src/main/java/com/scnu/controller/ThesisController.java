@@ -5,10 +5,12 @@ import com.scnu.dto.Execution;
 import com.scnu.dto.Exposer;
 import com.scnu.dto.PageBean;
 import com.scnu.dto.Result;
+import com.scnu.entity.StuThe;
 import com.scnu.entity.Thesis;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.RepeatException;
+import com.scnu.service.StuTheService;
 import com.scnu.service.ThesisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,9 @@ public class ThesisController {
 
     @Autowired
     private ThesisService thesisService;
+
+    @Autowired
+    private StuTheService stuTheService;
 
     /**
      * 获取论文列表
@@ -115,8 +120,8 @@ public class ThesisController {
 
     @RequestMapping("/check/{studentId}")
     public String courseCheck(Model model,@PathVariable Integer studentId){
-        List<Thesis> thesisList = thesisService.listThesisByStudentId(studentId);
-        model.addAttribute("list",thesisList);
+        List<StuThe> stuTheList = stuTheService.listStuTheByStudentId(studentId);
+        model.addAttribute("list",stuTheList);
         return "thesis/thesisCheck";
     }
 

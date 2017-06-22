@@ -237,21 +237,7 @@ public class PracticeServiceImpl implements PracticeService {
         }
     }
 
-    @Override
-    public List<Practice> listPracticeByStudentId(Integer studentId) {
-        //根据学生id查询获取所选实习的Id
-        List<Practice> result = practiceMapper.listPracticeByStudentId(studentId);
-        for (Practice practice : result) {
-            StuPra stuPra=new StuPra();
-            stuPra.setStuId(studentId);
-            stuPra.setPracticeId(practice.getId());
-            List<StuPra> select = stuPraMapper.select(stuPra);
-            if(select!=null && select.size()>0){
-                practice.setSelectTime(select.get(0).getCreateTime());
-            }
-        }
-        return result;
-    }
+
 
     @Transactional//开启事务
     @Override

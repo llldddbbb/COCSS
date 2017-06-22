@@ -10,6 +10,7 @@ import com.scnu.dto.PageResult;
 import com.scnu.dto.Result;
 import com.scnu.entity.Practice;
 import com.scnu.entity.StuPra;
+import com.scnu.entity.StuThe;
 import com.scnu.entity.Student;
 import com.scnu.service.StuPraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class StuPraServiceImpl implements StuPraService{
     private StudentMapper studentMapper;
 
     @Autowired
-    private PracticeMapper courseMapper;
+    private PracticeMapper practiceMapper;
     
     @Override
     public PageResult<StuPra> listStuPra(PageBean pageBean) {
@@ -43,12 +44,7 @@ public class StuPraServiceImpl implements StuPraService{
         example.setOrderByClause("stuId asc");
         List<StuPra> stuPraList = stuPraMapper.selectByExample(example);
         //封装student和course信息
-        for (StuPra stuPra : stuPraList) {
-            Student student = studentMapper.selectByPrimaryKey(stuPra.getStuId());
-            Practice practice = courseMapper.selectByPrimaryKey(stuPra.getPracticeId());
-            stuPra.setPractice(practice);
-            stuPra.setStudent(student);
-        }
+        this.fullStuThe(stuPraList,studentMapper,practiceMapper);
         // 取分页信息
         PageInfo<StuPra> pageInfo = new PageInfo<>(stuPraList);
         long total = pageInfo.getTotal(); //获取总记录数
@@ -75,6 +71,25 @@ public class StuPraServiceImpl implements StuPraService{
             return Result.ok();
         }else{
             return Result.isNotOK();
+        }
+    }
+
+    @Override
+    public List<StuPra> listStuPraByStudentId(Integer studentId) {
+        //根据学生id查询获取所选论文的Id
+        StuPra example =new StuPra();
+        example.setStuId(studentId);
+        List<StuPra> stuPraList=stuPraMapper.select(example);
+        this.fullStuThe(stuPraList,studentMapper,practiceMapper);
+        return stuPraList;
+    }
+
+    private void fullStuThe(List<StuPra> stuPraList, StudentMapper studentMapper, PracticeMapper practiceMapper) {
+        for (StuPra stuPra : stuPraList) {
+            Student student = studentMapper.selectByPrimaryKey(stuPra.getStuId());
+            Practice practice = practiceMapper.selectByPrimaryKey(stuPra.getPracticeId());
+            stuPra.setPractice(practice);
+            stuPra.setStudent(student);
         }
     }
 }
