@@ -73,6 +73,7 @@ var thesis = {
                 $("#header-info").html("欢迎你:"+stuName);
                 $("#logout").show();
                 $("#check").show();
+                $("#back").show();
             }
 
             //已经登录
@@ -199,6 +200,9 @@ var thesis = {
         }, function(){
 
         });
+    },
+    back:function(){
+        window.location.href="/thesis/list";
     }
 
 }

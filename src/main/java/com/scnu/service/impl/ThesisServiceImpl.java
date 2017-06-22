@@ -2,14 +2,15 @@ package com.scnu.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.scnu.dao.ThesisMapper;
 import com.scnu.dao.StuTheMapper;
 import com.scnu.dao.StudentMapper;
+import com.scnu.dao.ThesisMapper;
 import com.scnu.dao.cache.RedisDao;
 import com.scnu.dto.*;
-import com.scnu.entity.Thesis;
+import com.scnu.entity.Course;
 import com.scnu.entity.StuThe;
 import com.scnu.entity.Student;
+import com.scnu.entity.Thesis;
 import com.scnu.enums.StateEnum;
 import com.scnu.exception.CloseException;
 import com.scnu.exception.CourseException;
@@ -66,7 +67,22 @@ public class ThesisServiceImpl implements ThesisService {
 
     @Override
     public Thesis getThesis(int id) {
-        return thesisMapper.selectByPrimaryKey(id);
+        //添加Redis缓存
+        Thesis thesis = null;
+        //添加原则:不影响业务逻辑，用try catch捕获异常
+        try{
+            thesis= JsonUtil.jsonToPojo(redisDao.get(REDIS_THESIS_KEY+":"+id),Thesis.class);
+        }catch (Exception e){
+        }
+        if(thesis==null){
+            //如果缓存中为空，则从数据库中查询
+            thesis = thesisMapper.selectByPrimaryKey(id);
+            try{
+                redisDao.set(REDIS_THESIS_KEY+":"+id,JsonUtil.objectToJson(thesis));
+            }catch (Exception e){
+            }
+        }
+        return thesis;
     }
 
     @Override
@@ -119,6 +135,10 @@ public class ThesisServiceImpl implements ThesisService {
         //判断是否token是否正确，根据studentId获取student，生成studentMD5，与页面传来的进行对比
         Student student = studentMapper.selectByPrimaryKey(studentId);
         if(!studentMD5.equals(SecureUtil.getMD5(student))){
+            throw new CourseException("thesis data rewrite");//数据被重写了
+        }
+        //判断是否电商同学
+        if (!student.getMajorName().equals("教育学（电子商务职业教育）")){
             throw new CourseException("thesis data rewrite");//数据被重写了
         }
         try {

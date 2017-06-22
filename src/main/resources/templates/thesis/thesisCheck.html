@@ -26,6 +26,9 @@
     <div class="panel panel-default">
         <div class="panel-heading text-center">
             <h2>已选列表</h2>
+            <button type="button" id="back"  class="btn btn-info btn-sm" onclick="thesis.back()">
+                返回
+            </button>
         </div>
         <div class="panel-body">
             <table class="table table-hover">
@@ -49,7 +52,7 @@
                         <td><button class="btn btn-danger" th:attr="onclick='thesis.rollbackSeckill(\'' + ${stuThe.thesis.id} + '\')'" >退选</button></td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(list)}">
-                        <td colspan="5" style="text-align: center">暂无数据</td>
+                        <td colspan="6" style="text-align: center">暂无数据</td>
                     </tr>
                 </tbody>
             </table>
